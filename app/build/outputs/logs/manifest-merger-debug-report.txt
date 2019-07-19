@@ -1,0 +1,178 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-24:12
+INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-24:12
+INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-24:12
+INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-24:12
+MERGED from [com.android.support:design:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\5c31ca3911fa850e701dca344c35c2e4\AndroidManifest.xml:17:1-24:12
+MERGED from [com.android.support:appcompat-v7:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\338d2b03908fe6decb27ca3b9741164f\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\3d273a6219f84f9a960db8fd601eb795\AndroidManifest.xml:2:1-11:12
+MERGED from [com.android.support:support-v4:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\b9b53e3e15a8fbcaa8e0b06bcd129a40\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-fragment:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\9f817e4b12194d916044fdca51617f1f\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:animated-vector-drawable:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\e97f39294bcc39621a141c6d69831db4\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:recyclerview-v7:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\5e14640b5caf78be6dd3a25ca82b97e5\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-ui:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\07415c5356b412bbd73f1ff18d9e2ab3\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-utils:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\696d2892baaff208117f8a077947144e\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-vector-drawable:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\d8a14b4d7ea4196dbc2bc456e0c4d92e\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:transition:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\01820586e1f2c570c0f7d632bdd6d438\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-media-compat:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\e0140becc58a71053dde82013d41b193\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:loader:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\f1b721a6a3ed93350c15e5c5a46228e7\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:viewpager:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\6e4b63e55fd8fa24e9e420fddf346a61\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:coordinatorlayout:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\accbe4df7513872d3426ca58b3be5d78\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:drawerlayout:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\8fec3138e8d8c2a195fd2128ac8c1d27\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:slidingpanelayout:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\b8c6e75f98cd1723286a5e28acbd7fc6\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:customview:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\d330e54b0c42a675ab1179d88975427a\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:swiperefreshlayout:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\40a3e22c35cfbfcbb585aca391753809\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:asynclayoutinflater:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\235db34b45db36560ecb9ff789201279\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-compat:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\d6cbc209d1d4927649289b2c6e0d6ab4\AndroidManifest.xml:17:1-24:12
+MERGED from [com.android.support:versionedparcelable:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\a260083b0d899e4edf97ec5ac57f6386\AndroidManifest.xml:17:1-25:12
+MERGED from [com.android.support:cursoradapter:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\2b8fd04608bc5927c754ad051f9ab969\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:cardview-v7:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\bc4e9ca2a7a00c550db8c47469d5df52\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:runtime:1.1.1] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\34d41c7908e5ce5fecab34bc25f6815b\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:documentfile:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\3990407d30e15d86c4d5271af53ab44f\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:localbroadcastmanager:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\32f745614de8e984f7dcfa3d68c0f19a\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:print:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\27fadc932180b42aa99480ae49d27578\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:viewmodel:1.1.1] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\f2ba814b94dace516de2a8246d38f596\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:interpolator:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\c4941c4d56fbb21344e64ca1cb050e3b\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:livedata:1.1.1] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\2fbfdda49c506809559b9101eb498f02\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:livedata-core:1.1.1] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\5d9f3386f6c73765bccb59a10ddfc8b3\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.core:runtime:1.1.1] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\3b9afb4646a1e6fa211c103cf21f7f92\AndroidManifest.xml:17:1-22:12
+INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-24:12
+INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-24:12
+INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-24:12
+	package
+		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:3:5-51
+		INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-24:12
+		INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
+	android:versionCode
+		INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-24:12
+		INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:11-69
+application
+ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:5:5-22:19
+MERGED from [com.android.support:design:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\5c31ca3911fa850e701dca344c35c2e4\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:design:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\5c31ca3911fa850e701dca344c35c2e4\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\3d273a6219f84f9a960db8fd601eb795\AndroidManifest.xml:9:5-20
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\3d273a6219f84f9a960db8fd601eb795\AndroidManifest.xml:9:5-20
+MERGED from [com.android.support:support-compat:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\d6cbc209d1d4927649289b2c6e0d6ab4\AndroidManifest.xml:22:5-94
+MERGED from [com.android.support:support-compat:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\d6cbc209d1d4927649289b2c6e0d6ab4\AndroidManifest.xml:22:5-94
+MERGED from [com.android.support:versionedparcelable:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\a260083b0d899e4edf97ec5ac57f6386\AndroidManifest.xml:22:5-23:19
+MERGED from [com.android.support:versionedparcelable:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\a260083b0d899e4edf97ec5ac57f6386\AndroidManifest.xml:22:5-23:19
+	android:appComponentFactory
+		ADDED from [com.android.support:support-compat:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\d6cbc209d1d4927649289b2c6e0d6ab4\AndroidManifest.xml:22:18-91
+	android:supportsRtl
+		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:10:9-35
+	android:label
+		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:8:9-41
+	android:roundIcon
+		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:9:9-54
+	android:icon
+		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:7:9-43
+	android:allowBackup
+		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:6:9-35
+	android:theme
+		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:11:9-40
+activity#com.example.productivityappprototype.MainActivity
+ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:12:9-21:20
+	android:label
+		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:14:13-45
+	android:theme
+		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:15:13-56
+	android:name
+		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:13:13-41
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:16:13-20:29
+action#android.intent.action.MAIN
+ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:17:17-69
+	android:name
+		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:17:25-66
+category#android.intent.category.LAUNCHER
+ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:19:17-77
+	android:name
+		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:19:27-74
+uses-sdk
+INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
+MERGED from [com.android.support:design:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\5c31ca3911fa850e701dca344c35c2e4\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:design:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\5c31ca3911fa850e701dca344c35c2e4\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\338d2b03908fe6decb27ca3b9741164f\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\338d2b03908fe6decb27ca3b9741164f\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\3d273a6219f84f9a960db8fd601eb795\AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\3d273a6219f84f9a960db8fd601eb795\AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support:support-v4:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\b9b53e3e15a8fbcaa8e0b06bcd129a40\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v4:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\b9b53e3e15a8fbcaa8e0b06bcd129a40\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\9f817e4b12194d916044fdca51617f1f\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\9f817e4b12194d916044fdca51617f1f\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\e97f39294bcc39621a141c6d69831db4\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\e97f39294bcc39621a141c6d69831db4\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:recyclerview-v7:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\5e14640b5caf78be6dd3a25ca82b97e5\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:recyclerview-v7:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\5e14640b5caf78be6dd3a25ca82b97e5\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\07415c5356b412bbd73f1ff18d9e2ab3\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\07415c5356b412bbd73f1ff18d9e2ab3\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\696d2892baaff208117f8a077947144e\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\696d2892baaff208117f8a077947144e\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\d8a14b4d7ea4196dbc2bc456e0c4d92e\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\d8a14b4d7ea4196dbc2bc456e0c4d92e\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:transition:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\01820586e1f2c570c0f7d632bdd6d438\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:transition:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\01820586e1f2c570c0f7d632bdd6d438\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-media-compat:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\e0140becc58a71053dde82013d41b193\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-media-compat:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\e0140becc58a71053dde82013d41b193\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:loader:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\f1b721a6a3ed93350c15e5c5a46228e7\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:loader:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\f1b721a6a3ed93350c15e5c5a46228e7\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:viewpager:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\6e4b63e55fd8fa24e9e420fddf346a61\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:viewpager:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\6e4b63e55fd8fa24e9e420fddf346a61\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:coordinatorlayout:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\accbe4df7513872d3426ca58b3be5d78\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:coordinatorlayout:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\accbe4df7513872d3426ca58b3be5d78\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:drawerlayout:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\8fec3138e8d8c2a195fd2128ac8c1d27\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:drawerlayout:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\8fec3138e8d8c2a195fd2128ac8c1d27\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:slidingpanelayout:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\b8c6e75f98cd1723286a5e28acbd7fc6\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:slidingpanelayout:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\b8c6e75f98cd1723286a5e28acbd7fc6\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:customview:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\d330e54b0c42a675ab1179d88975427a\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:customview:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\d330e54b0c42a675ab1179d88975427a\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:swiperefreshlayout:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\40a3e22c35cfbfcbb585aca391753809\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:swiperefreshlayout:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\40a3e22c35cfbfcbb585aca391753809\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:asynclayoutinflater:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\235db34b45db36560ecb9ff789201279\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:asynclayoutinflater:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\235db34b45db36560ecb9ff789201279\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\d6cbc209d1d4927649289b2c6e0d6ab4\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\d6cbc209d1d4927649289b2c6e0d6ab4\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:versionedparcelable:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\a260083b0d899e4edf97ec5ac57f6386\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:versionedparcelable:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\a260083b0d899e4edf97ec5ac57f6386\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cursoradapter:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\2b8fd04608bc5927c754ad051f9ab969\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cursoradapter:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\2b8fd04608bc5927c754ad051f9ab969\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cardview-v7:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\bc4e9ca2a7a00c550db8c47469d5df52\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cardview-v7:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\bc4e9ca2a7a00c550db8c47469d5df52\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.1] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\34d41c7908e5ce5fecab34bc25f6815b\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.1] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\34d41c7908e5ce5fecab34bc25f6815b\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:documentfile:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\3990407d30e15d86c4d5271af53ab44f\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:documentfile:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\3990407d30e15d86c4d5271af53ab44f\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:localbroadcastmanager:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\32f745614de8e984f7dcfa3d68c0f19a\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:localbroadcastmanager:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\32f745614de8e984f7dcfa3d68c0f19a\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:print:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\27fadc932180b42aa99480ae49d27578\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:print:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\27fadc932180b42aa99480ae49d27578\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.1] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\f2ba814b94dace516de2a8246d38f596\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.1] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\f2ba814b94dace516de2a8246d38f596\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:interpolator:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\c4941c4d56fbb21344e64ca1cb050e3b\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:interpolator:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\c4941c4d56fbb21344e64ca1cb050e3b\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata:1.1.1] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\2fbfdda49c506809559b9101eb498f02\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata:1.1.1] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\2fbfdda49c506809559b9101eb498f02\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.1] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\5d9f3386f6c73765bccb59a10ddfc8b3\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.1] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\5d9f3386f6c73765bccb59a10ddfc8b3\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.1] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\3b9afb4646a1e6fa211c103cf21f7f92\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.1] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\3b9afb4646a1e6fa211c103cf21f7f92\AndroidManifest.xml:20:5-44
+INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml

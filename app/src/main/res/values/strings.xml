@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Productivity App Prototype</string>
+    <string name="action_settings">Settings</string>
+    <string name="tab_label_schedule">Schedule</string>
+    <string name="tab_label_item_list">Item List</string>
+    <string name="tab_label_statistics">Statistics</string>
+</resources>
