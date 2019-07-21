@@ -1096,6 +1096,7 @@ id design_navigation_view
 id dimensions
 id direct
 id disableHome
+id edit_item_name
 id edit_query
 id end
 id end_padder
@@ -1125,6 +1126,7 @@ id info
 id invisible
 id italic
 id item
+id item_linear_layout
 id item_touch_helper_previous_elevation
 id labeled
 id largeLabel
@@ -1217,6 +1219,7 @@ id textSpacerNoButtons
 id textSpacerNoTitle
 id textStart
 id text_input_password_toggle
+id text_no_items
 id textinput_counter
 id textinput_error
 id textinput_helper_text
@@ -1304,6 +1307,7 @@ layout design_navigation_item_subheader
 layout design_navigation_menu
 layout design_navigation_menu_item
 layout design_text_input_password_icon
+layout item_dialog
 layout item_list_fragment
 layout itemlist_item
 layout mtrl_layout_snackbar
@@ -1391,6 +1395,7 @@ string status_bar_notification_info_overflow
 string tab_label_item_list
 string tab_label_schedule
 string tab_label_statistics
+string text_no_items
 style AlertDialog_AppCompat
 style AlertDialog_AppCompat_Light
 style Animation_AppCompat_Dialog
