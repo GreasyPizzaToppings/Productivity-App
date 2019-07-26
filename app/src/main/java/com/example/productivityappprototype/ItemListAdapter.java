@@ -1,9 +1,12 @@
 package com.example.productivityappprototype;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,16 +15,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.LinkedList;
 
+import static java.lang.System.in;
+
 public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemViewHolder> {
     private final LinkedList<String> itemList;
     private LayoutInflater mInflater;
     private TextView tutorialMessage = null;
     private final int MAX_ITEM_LENGTH = 100;
     private final int MIN_ITEM_LENGTH = 1;
+    private final String ITEM_NOT_FOUND = "";
+    private final String baseItemKey = "item:"; //The base key used to store the items in the bundle
+    private SharedPreferences sharedPreferences;
+    private String sharedPreferencesFile = "com.example.productivityappprototype";
+    private SharedPreferences.Editor preferencesEditor;
+
 
     public ItemListAdapter(ItemListFragment context, LinkedList<String> itemList) {
         mInflater = LayoutInflater.from(context.getActivity());
         this.itemList = itemList;
+
+        //Initialise the SharedPreferences object
+        sharedPreferences = context.getActivity().getSharedPreferences(sharedPreferencesFile, Context.MODE_PRIVATE);
+        preferencesEditor = sharedPreferences.edit(); //Initialise the editor
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -49,14 +64,25 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
 
             //Get the layout inflater for the custom layout and inflate the layout for the dialog
             LayoutInflater inflater = LayoutInflater.from(v.getContext());
-            builder.setView(inflater.inflate(R.layout.item_dialog, null));
+
+            View dialogView = inflater.inflate(R.layout.item_dialog, null); //Inflate the custom layout into a view
+
+            //Attempt to get a handle on the edit text ui component inside to set the text to the current item so the user knows what item they are editing
+            EditText itemEditText = dialogView.findViewById(R.id.edit_item_name);
+
+            //Set the edit text to the current name of the item for increased UI ease of access
+            int itemIndex = getLayoutPosition();
+            itemEditText.setText(itemList.get(itemIndex));
 
             //Set the other button to delete the item from the list
-            builder.setNeutralButton("Delete item", new DialogInterface.OnClickListener() {
+            builder.setNeutralButton(R.string.dialog_delete, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    int mPosition = getLayoutPosition(); //Get the position of the clicked item to know what word holder was clicked
-                    itemList.remove(mPosition); //Delete the selected word
+                    int itemIndex = getLayoutPosition(); //Get the position of the clicked item to know what word holder was clicked
+                    itemList.remove(itemIndex); //Delete the selected word from the item list
+
+                    //Delete the item from the shared preferences file using custom method to shift the data and avoid gaps
+                    RemoveItemAt(itemIndex);
 
                     //Show the tutorial message if there are no items
                     if(itemList.size() == 0) {
@@ -69,7 +95,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             });
 
             //Set the negative button for the dialog
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
@@ -77,7 +103,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             });
 
             //Set the positive button for the dialog to accept the new name
-            builder.setPositiveButton("Edit Item", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.dialog_done, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //Get a handle on the edittext in the custom layout
@@ -85,13 +111,18 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
                     String newItemName = editItemName.getText().toString();
 
                     //Update the name of the view in the recyclerview
-                    if (newItemName.length() > 0 && newItemName.length() <= 100) {
-                        int mPosition = getLayoutPosition(); //Get the position of the clicked item to know what word holder was clicked
-                        itemList.set(mPosition, newItemName); //Update the word in the wordlist with the new word
+                    if (newItemName.length() >= MIN_ITEM_LENGTH && newItemName.length() <= MAX_ITEM_LENGTH) {
+                        int itemIndex = getLayoutPosition(); //Get the position of the clicked item to know what word holder was clicked
+                        itemList.set(itemIndex, newItemName); //Update the word in the wordlist with the new word
                         notifyDataSetChanged();
+
+                        //Update the value in the shared preferences file
+                        String fullItemKey = baseItemKey + itemIndex; //get the key of the changed item
+                        preferencesEditor.putString(fullItemKey, newItemName);
+                        preferencesEditor.apply();
+
                         return; //No need to check for invalid cases
                     }
-
 
                     //Inform user about their rejected input for the invalid cases
                     if (newItemName.length() < MIN_ITEM_LENGTH) {
@@ -104,9 +135,27 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
                 }
             });
 
+
+            builder.setView(dialogView);
             builder.create().show(); //Build and create the dialog
         }
     }
+
+    public void RemoveItemAt(int indexDelete) {
+
+        //Move the items after this element back one, overwriting the data which effectively deletes the unwanted item.
+        for(int indexItem = indexDelete; indexItem < itemList.size(); indexItem++) {
+            //Build the key
+            String finalItemKey = baseItemKey + indexItem;
+
+            preferencesEditor.putString(finalItemKey, itemList.get(indexItem));
+        }
+
+        //Delete the last item to remove the double-up of the last item
+        preferencesEditor.remove((baseItemKey + itemList.size()));
+        preferencesEditor.apply();
+    }
+
 
     @NonNull
     @Override
@@ -125,5 +174,4 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     public int getItemCount() {
         return itemList.size();
     }
-
 }

@@ -5,6 +5,7 @@
 package com.example.productivityappprototype;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -21,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.LinkedList;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class ItemListFragment extends Fragment implements View.OnClickListener {
     public LinkedList<String> itemList = new LinkedList<>();
     private RecyclerView recyclerView;
@@ -28,6 +31,12 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
     private com.example.productivityappprototype.ItemListAdapter adapter;
     private final int MAX_ITEM_LENGTH = 100;
     private final int MIN_ITEM_LENGTH = 1;
+    private final String baseItemKey = "item:"; //The base key used to store the items in the bundle
+    private SharedPreferences sharedPreferences;
+    private String sharedPreferencesFile = "com.example.productivityappprototype";
+    private SharedPreferences.Editor preferencesEditor;
+    private final String ITEM_NOT_FOUND = "";
+
 
     public ItemListFragment() {
         // Required empty public constructor
@@ -41,19 +50,23 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
         View v = inflater.inflate(R.layout.item_list_fragment, container, false);
 
         //Get a handle to the floating action button and assign a click listener which adds an item to the list
-        FloatingActionButton addItemButton = (FloatingActionButton) v.findViewById(R.id.fb_add_item);
+        FloatingActionButton addItemButton = v.findViewById(R.id.fb_add_item);
         addItemButton.setOnClickListener(this);
 
+        //Initialise the SharedPreferences object
+        sharedPreferences = getActivity().getSharedPreferences(sharedPreferencesFile, MODE_PRIVATE);
+        preferencesEditor = sharedPreferences.edit(); //Initialise the editor
 
-        //---Restore the data from the bundle----
-        if(itemList != null && savedInstanceState != null) {
-            String baseItemKey = "item:";
+        //Restore the data from the SharedPreferences file
+        if(!sharedPreferencesFile.isEmpty()) {
             //Use the bundle size as the linked list gets reinitialised to size 0 after every config change. -1 because there is always a bool variable stored as well
-            for(int item = 0; item < savedInstanceState.size() - 1; item++) {
+            for(int item = 0; item < sharedPreferencesFile.length(); item++) {
                 String fullItemKey = baseItemKey + item; //Will build keys like: item:0, item:1 ... used to store and access each item in the bundle
-                String restoredItem = savedInstanceState.getString(fullItemKey);
-                if (restoredItem != null && restoredItem.length() != 0) {
-                    itemList.addLast(restoredItem); //Add the non-null item back
+                String restoredItem = sharedPreferences.getString(fullItemKey, ITEM_NOT_FOUND); //Blank default values are the error case as you cannot have an item with no length
+
+                //Restore items that were found in the restored shared preference
+                if (restoredItem != ITEM_NOT_FOUND) {
+                    itemList.addLast(restoredItem);
                 }
             }
 
@@ -61,6 +74,7 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
                 adapter.notifyDataSetChanged(); //Refresh if the adapter exists
             }
         }
+
         return v;
     }
 
@@ -113,12 +127,18 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
                 String userItemName = editItemName.getText().toString();
 
                 //If the user entered a valid name for the new item
-                if (userItemName.length() > 0 && userItemName.length() <= 100) {
-                    //add the new item to the recycler view
-                    itemList.addLast(userItemName);
-                    ToggleTutorialMessage(); //Hide the no items message
+                if (userItemName.length() >= MIN_ITEM_LENGTH && userItemName.length() <= MAX_ITEM_LENGTH) {
+                    itemList.addLast(userItemName); //add the new item to the recycler view
+                    ToggleTutorialMessage(); //Hide the no items message after updating the list
+
                     adapter.notifyDataSetChanged();
                     recyclerView.smoothScrollToPosition(itemList.size() - 1);
+
+                    //Update the value in the shared preferences file
+                    String fullItemKey = baseItemKey + (itemList.size() - 1); //get the key of the changed item
+                    preferencesEditor.putString(fullItemKey, userItemName);
+                    preferencesEditor.apply();
+
                     return; //No need to check for invalid cases
                 }
 
@@ -142,19 +162,5 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
         });
 
         builder.create().show(); //Build and show the dialog
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        if(itemList == null) {
-            return;
-        }
-
-        //Store each of the users's items with a predictable key
-        String baseItemKey = "item:";
-        for(int item = 0; item < itemList.size(); item++) {
-            String fullItemKey = baseItemKey + item; //Will build keys like: item:0, item:1 ... used to store and access each item in the bundle
-            savedInstanceState.putString(fullItemKey, itemList.get(item));
-        }
     }
 }

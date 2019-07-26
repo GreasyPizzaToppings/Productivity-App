@@ -1106,6 +1106,7 @@ id exitUntilCollapsed
 id expand_activities_button
 id expanded_menu
 id fb_add_item
+id fb_schedule_item
 id fill
 id fill_horizontal
 id fill_vertical
@@ -1219,7 +1220,9 @@ id textSpacerNoButtons
 id textSpacerNoTitle
 id textStart
 id text_input_password_toggle
+id text_item
 id text_no_items
+id text_time
 id textinput_counter
 id textinput_error
 id textinput_helper_text
@@ -1381,9 +1384,13 @@ string appbar_scrolling_view_behavior
 string bottom_sheet_behavior
 string character_counter_content_description
 string character_counter_pattern
+string dialog_cancel
+string dialog_delete
+string dialog_done
 string fab_transformation_scrim_behavior
 string fab_transformation_sheet_behavior
 string hide_bottom_view_on_scroll_behavior
+string item_name
 string mtrl_chip_close_icon_content_description
 string password_toggle_content_description
 string path_password_eye
@@ -1395,7 +1402,9 @@ string status_bar_notification_info_overflow
 string tab_label_item_list
 string tab_label_schedule
 string tab_label_statistics
+string text_item
 string text_no_items
+string text_time
 style AlertDialog_AppCompat
 style AlertDialog_AppCompat_Light
 style Animation_AppCompat_Dialog

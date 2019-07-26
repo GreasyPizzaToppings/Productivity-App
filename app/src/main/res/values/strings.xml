@@ -4,5 +4,11 @@
     <string name="tab_label_schedule">Schedule</string>
     <string name="tab_label_item_list">Item List</string>
     <string name="tab_label_statistics">Statistics</string>
-    <string name="text_no_items">No items to see here. Try adding some with the plus button in the bottom right corner!</string>
+    <string name="text_no_items">No items to see here! Add them with the plus button in the bottom right corner.</string>
+    <string name="dialog_delete">Delete item</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_done">Done</string>
+    <string name="text_item">Item</string>
+    <string name="text_time">Scheduled Time</string>
+    <string name="item_name">Item Name</string>
 </resources>
