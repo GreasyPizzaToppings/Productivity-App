@@ -11,4 +11,14 @@
     <string name="text_item">Item</string>
     <string name="text_time">Scheduled Time</string>
     <string name="item_name">Item Name</string>
+    <string name="hint_one_time_item_name">One-Time Item Name</string>
+    <string name="define_item_time"><![CDATA[(Optional) Define Start & OR End Times]]></string>
+    <string name="one_time_item">OR Select A One-Time Item</string>
+    <string name="existing_item">Select An Existing Item</string>
+    <string name="select_item">Select An Item To Schedule</string>
+    <string name="choose">Choose</string>
+    <string name="end_time">End Time:</string>
+    <string name="start_time">Start Time:</string>
+    <string name="dialog_schedule_message">Select an item list item, or a one-time item to schedule. Optionally provide a start time, end time, or both.</string>
+    <string name="awaiting_selection">Awaiting Selection</string>
 </resources>

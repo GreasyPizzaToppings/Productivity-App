@@ -7,7 +7,7 @@
 
 
     <EditText
-        android:id="@+id/edit_item_name"
+        android:id="@+id/edit_one_time_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"

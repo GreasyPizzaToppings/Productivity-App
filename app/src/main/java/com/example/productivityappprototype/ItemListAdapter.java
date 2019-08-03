@@ -1,21 +1,21 @@
 package com.example.productivityappprototype;
 
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import java.util.LinkedList;
-
-import static java.lang.System.in;
 
 public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemViewHolder> {
     private final LinkedList<String> itemList;
@@ -23,12 +23,10 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     private TextView tutorialMessage = null;
     private final int MAX_ITEM_LENGTH = 100;
     private final int MIN_ITEM_LENGTH = 1;
-    private final String ITEM_NOT_FOUND = "";
     private final String baseItemKey = "item:"; //The base key used to store the items in the bundle
     private SharedPreferences sharedPreferences;
     private String sharedPreferencesFile = "com.example.productivityappprototype";
     private SharedPreferences.Editor preferencesEditor;
-
 
     public ItemListAdapter(ItemListFragment context, LinkedList<String> itemList) {
         mInflater = LayoutInflater.from(context.getActivity());
@@ -68,7 +66,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             View dialogView = inflater.inflate(R.layout.item_dialog, null); //Inflate the custom layout into a view
 
             //Attempt to get a handle on the edit text ui component inside to set the text to the current item so the user knows what item they are editing
-            EditText itemEditText = dialogView.findViewById(R.id.edit_item_name);
+            EditText itemEditText = dialogView.findViewById(R.id.edit_one_time_item);
 
             //Set the edit text to the current name of the item for increased UI ease of access
             int itemIndex = getLayoutPosition();
@@ -107,7 +105,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //Get a handle on the edittext in the custom layout
-                    EditText editItemName = ((AlertDialog) dialog).findViewById(R.id.edit_item_name);
+                    EditText editItemName = ((AlertDialog) dialog).findViewById(R.id.edit_one_time_item);
                     String newItemName = editItemName.getText().toString();
 
                     //Update the name of the view in the recyclerview
@@ -135,9 +133,10 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
                 }
             });
 
+            builder.setView(dialogView); //Attach this custom layout to the dialog
 
-            builder.setView(dialogView);
-            builder.create().show(); //Build and create the dialog
+            //Build and create the dialog
+            builder.create().show();
         }
     }
 

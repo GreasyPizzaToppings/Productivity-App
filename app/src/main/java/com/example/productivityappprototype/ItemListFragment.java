@@ -13,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +35,11 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
     private String sharedPreferencesFile = "com.example.productivityappprototype";
     private SharedPreferences.Editor preferencesEditor;
     private final String ITEM_NOT_FOUND = "";
+
+    /*The maximum number of items that can be contained within the item list recycler view. For potential performance reasons, this is limited.
+    Also, if the user has more than 100 things to do, they SHOULD remove some items and prioritise.
+    */
+    private final int MAX_NO_ITEMS = 100;
 
 
     public ItemListFragment() {
@@ -61,7 +65,7 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
         if(!sharedPreferencesFile.isEmpty()) {
             //Use the bundle size as the linked list gets reinitialised to size 0 after every config change. -1 because there is always a bool variable stored as well
             for(int item = 0; item < sharedPreferencesFile.length(); item++) {
-                String fullItemKey = baseItemKey + item; //Will build keys like: item:0, item:1 ... used to store and access each item in the bundle
+                String fullItemKey = baseItemKey + item; //Build the key used to predictably store the items in the file
                 String restoredItem = sharedPreferences.getString(fullItemKey, ITEM_NOT_FOUND); //Blank default values are the error case as you cannot have an item with no length
 
                 //Restore items that were found in the restored shared preference
@@ -81,7 +85,7 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         //Get a handle to the recycler view
-        recyclerView = getView().findViewById(R.id.recyclerview);
+        recyclerView = getView().findViewById(R.id.recyclerview_item_list);
 
         //Create the adapter and supply the data to be displayed
         adapter = new ItemListAdapter(this, itemList);
@@ -123,21 +127,29 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //Extract the string and add it to the recyclerview
-                EditText editItemName = ((AlertDialog) dialog).findViewById(R.id.edit_item_name);
+                EditText editItemName = ((AlertDialog) dialog).findViewById(R.id.edit_one_time_item);
                 String userItemName = editItemName.getText().toString();
 
                 //If the user entered a valid name for the new item
                 if (userItemName.length() >= MIN_ITEM_LENGTH && userItemName.length() <= MAX_ITEM_LENGTH) {
-                    itemList.addLast(userItemName); //add the new item to the recycler view
-                    ToggleTutorialMessage(); //Hide the no items message after updating the list
 
-                    adapter.notifyDataSetChanged();
-                    recyclerView.smoothScrollToPosition(itemList.size() - 1);
+                    //When the user hasn't made too many items
+                    if(itemList.size() < MAX_NO_ITEMS) {
+                        itemList.addLast(userItemName); //add the new item to the recycler view
+                        ToggleTutorialMessage(); //Hide the no items message after updating the list
 
-                    //Update the value in the shared preferences file
-                    String fullItemKey = baseItemKey + (itemList.size() - 1); //get the key of the changed item
-                    preferencesEditor.putString(fullItemKey, userItemName);
-                    preferencesEditor.apply();
+                        adapter.notifyDataSetChanged();
+                        recyclerView.smoothScrollToPosition(itemList.size() - 1);
+
+                        //Update the value in the shared preferences file
+                        String fullItemKey = baseItemKey + (itemList.size() - 1); //get the key of the changed item
+                        preferencesEditor.putString(fullItemKey, userItemName);
+                        preferencesEditor.apply();
+                    }
+
+                    else {
+                        Toast.makeText(getContext(), "Error. You cannot have more than " + MAX_NO_ITEMS + " items. Delete some before adding more." , Toast.LENGTH_LONG).show();
+                    }
 
                     return; //No need to check for invalid cases
                 }
