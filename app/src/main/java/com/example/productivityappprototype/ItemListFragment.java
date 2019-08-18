@@ -25,7 +25,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class ItemListFragment extends Fragment implements View.OnClickListener {
     public LinkedList<String> itemList = new LinkedList<>();
-    private RecyclerView recyclerView;
+    private RecyclerView itemListRecyclerView;
     private TextView tutorialMessage = null;
     private com.example.productivityappprototype.ItemListAdapter adapter;
     private final int MAX_ITEM_LENGTH = 100;
@@ -85,14 +85,14 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         //Get a handle to the recycler view
-        recyclerView = getView().findViewById(R.id.recyclerview_item_list);
+        itemListRecyclerView = getView().findViewById(R.id.recyclerview_item_list);
 
         //Create the adapter and supply the data to be displayed
         adapter = new ItemListAdapter(this, itemList);
-        recyclerView.setAdapter(adapter); //Attach the adapter to the recycler view
+        itemListRecyclerView.setAdapter(adapter); //Attach the adapter to the recycler view
 
         //Assign the recycler view a default layout manager
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        itemListRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
         tutorialMessage = getView().findViewById(R.id.text_no_items);
         ToggleTutorialMessage();
@@ -139,7 +139,7 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
                         ToggleTutorialMessage(); //Hide the no items message after updating the list
 
                         adapter.notifyDataSetChanged();
-                        recyclerView.smoothScrollToPosition(itemList.size() - 1);
+                        itemListRecyclerView.smoothScrollToPosition(itemList.size() - 1);
 
                         //Update the value in the shared preferences file
                         String fullItemKey = baseItemKey + (itemList.size() - 1); //get the key of the changed item

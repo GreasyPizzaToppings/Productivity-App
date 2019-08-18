@@ -1165,15 +1165,16 @@ id pin
 id progress_circular
 id progress_horizontal
 id radio
-id recyclerview_dialog
 id recyclerview_item_list
 id recyclerview_schedule
+id recyclerview_schedule_dialog
 id right
 id right_icon
 id right_side
 id save_image_matrix
 id save_non_transition_alpha
 id save_scale_type
+id scheduleLayout
 id screen
 id scroll
 id scrollIndicatorDown
@@ -1237,6 +1238,7 @@ id text_select_time_heading
 id text_start_time
 id text_start_time_selected
 id text_time
+id text_width_measuring
 id textinput_counter
 id textinput_error
 id textinput_helper_text

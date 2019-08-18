@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scheduleLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ScheduleFragment">
@@ -10,29 +11,29 @@
         android:id="@+id/text_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
         android:layout_marginTop="16dp"
         android:text="@string/text_item"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="24sp"
         android:typeface="normal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="16dp" />
+        app:layout_constraintStart_toStartOf="@+id/recyclerview_schedule"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/text_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
         android:text="@string/text_time"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="24sp"
         android:typeface="normal"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginEnd="16dp" />
+        app:layout_constraintEnd_toEndOf="@+id/recyclerview_schedule"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fb_schedule_item"
@@ -50,14 +51,21 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_schedule"
-        android:layout_width="395dp"
-        android:layout_height="587dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_item" />
+        app:layout_constraintTop_toBottomOf="@+id/text_time" />
+
+    <TextView
+        android:id="@+id/text_width_measuring"
+        style="@style/itemlist_item_style"
+        app:layout_constraintStart_toStartOf="@+id/recyclerview_schedule"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerview_schedule"
+        tools:visibility="gone" />
 </android.support.constraint.ConstraintLayout>

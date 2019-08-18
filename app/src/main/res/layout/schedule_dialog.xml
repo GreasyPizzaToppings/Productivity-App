@@ -44,14 +44,14 @@
         android:layout_marginTop="12dp"
         android:text="@string/existing_item"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerview_dialog"
-        app:layout_constraintEnd_toEndOf="@+id/recyclerview_dialog"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerview_schedule_dialog"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerview_schedule_dialog"
         app:layout_constraintHorizontal_bias="0.515"
-        app:layout_constraintStart_toStartOf="@+id/recyclerview_dialog"
+        app:layout_constraintStart_toStartOf="@+id/recyclerview_schedule_dialog"
         app:layout_constraintTop_toBottomOf="@+id/text_select_item_heading" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview_dialog"
+        android:id="@+id/recyclerview_schedule_dialog"
         android:layout_width="0dp"
         android:layout_height="157dp"
         android:layout_marginStart="16dp"
@@ -73,7 +73,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintEnd_toEndOf="@+id/edit_one_time_item"
         app:layout_constraintStart_toStartOf="@+id/edit_one_time_item"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerview_dialog" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerview_schedule_dialog" />
 
 
     <EditText

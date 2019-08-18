@@ -1,16 +1,12 @@
-//TODO
-/*
-Learn how to share data between this fragment and the adapter, so that I can see what item the user taps in the dialogue, to be able to do schedule the correct item.
-
- */
-
 package com.example.productivityappprototype;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,6 +19,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,23 +29,31 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import java.sql.Time;
 import java.util.Calendar;
 import java.util.LinkedList;
 
-public class ScheduleFragment extends Fragment implements View.OnClickListener, ScheduleItemListAdapter.ScheduleAdapterInterface {
+public class ScheduleFragment extends Fragment implements View.OnClickListener, ScheduleDialogItemListAdapter.ScheduleAdapterInterface {
     private SharedPreferences sharedPreferences;
     private String sharedPreferencesFile = "com.example.productivityappprototype";
     private final String ITEM_NOT_FOUND = "";
     private final String baseItemKey = "item:"; //The base key used to store the items in the bundle
     public LinkedList<String> itemList = new LinkedList<>(); //The list which stores a copy of the items in the item list tab
+    public LinkedList<String> scheduledItemList = new LinkedList<>(); //The list of items (and also entered times) that the user has scheduled through the scheduling dialog
     private String selectedItemInDialog; //The string which holds the name of the item the user selects in the AlertDialog
     private EditText editTextOneTimeItem;
     private AlertDialog scheduleDialog;
     private TimePickerDialog timePickerDialog;
     private long defaultStartEndTime = 0xDEADBEEF;
     private long startTimeInMs, endTimeInMs = defaultStartEndTime; //The starting and ending time of an item if the user specifies them. Default value is 0xdeadbeef
+    private Time startTime, endTime;
+    private RecyclerView scheduleRecyclerView;
+    private com.example.productivityappprototype.ScheduleItemListAdapter scheduleItemListAdapter;
+    private final int MAX_ITEM_LENGTH = 100;
+    private final int MIN_ITEM_LENGTH = 1;
+    private TextView itemWidthMeasuringContainer, timeHeaderTextView;
+    float recyclerViewWidth, timeTextWidth; //values used for boundary calculations
+    private Paint scheduledItemPaint, timeHeaderPaint;
 
     public ScheduleFragment() {
         // Required empty public constructor
@@ -72,7 +77,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         itemHeaderTextView.setText(itemHeaderSpannable); //Update the text and make it underlined
 
         //Repeat the process for the "scheduled time" header text view
-        TextView timeHeaderTextView = v.findViewById(R.id.text_time);
+        timeHeaderTextView = v.findViewById(R.id.text_time);
 
         String timeHeader = getContext().getString(R.string.text_time);
         Spannable timeHeaderSpannable = new SpannableString(timeHeader);
@@ -88,6 +93,27 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        //Get a handle to the recycler view for the scheduled items
+        scheduleRecyclerView = getView().findViewById(R.id.recyclerview_schedule);
+
+        //Create the adapter and supply the data to be displayed
+        scheduleItemListAdapter = new ScheduleItemListAdapter(this, scheduledItemList);
+        scheduleRecyclerView.setAdapter(scheduleItemListAdapter); //Attach the adapter to the recycler view
+
+        //Assign the recycler view a default layout manager
+        scheduleRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+
+        //Get a handle on the textview that all items go into to allow measuring of width of text
+        itemWidthMeasuringContainer = view.findViewById(R.id.text_width_measuring);
+
+        /*Get a handle on the textview to calculate the boundary which will allow for the time text to be placed
+        underneath the "Scheduled Time" header, and for the item text to go before it
+        */
+        timeHeaderTextView = view.findViewById(R.id.text_time);
+
+        //Initialise paint objects used by the 3 related scheduled item formatting methods
+        timeHeaderPaint = timeHeaderTextView.getPaint(); //Used to calculate the width of the header to calculate the boundary
+        scheduledItemPaint = itemWidthMeasuringContainer.getPaint();
     }
 
     //This method will read in the current SharedPreferences file and create the item list to be used by the dialog popup used to schedule an item
@@ -112,7 +138,6 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         }
     }
 
-
     //The on click listener for the floating action button which displays a dialog and to allow the user to schedule a task
     @Override
     public void onClick(final View v) {
@@ -129,8 +154,8 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
 
         //--Initiate the recycler view in the dialog layout to display the item list items--
         UpdateItemList(); //Read in the SharedPreferences file again to ensure both item lists are identical
-        RecyclerView dialogRecyclerView = dialogView.findViewById(R.id.recyclerview_dialog); //Get a handle to the recyclerview
-        com.example.productivityappprototype.ScheduleItemListAdapter adapter = new ScheduleItemListAdapter(this, itemList, this); //Create the correct adapter and supply the data with the custom adapter
+        RecyclerView dialogRecyclerView = dialogView.findViewById(R.id.recyclerview_schedule_dialog); //Get a handle to the recyclerview
+        ScheduleDialogItemListAdapter adapter = new ScheduleDialogItemListAdapter(this, itemList, this); //Create the correct adapter and supply the data with the custom adapter
         dialogRecyclerView.setAdapter(adapter); //Set the adapter
         dialogRecyclerView.setLayoutManager(new LinearLayoutManager(dialogView.getContext())); //Assign the recyclerview a default layout manager
 
@@ -141,25 +166,29 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                //If the user selected an item from the item list before pressing 'schedule item'
+                //If the user selected an item in some way before pressing 'schedule item'
                 if (selectedItemInDialog != null) {
-                    //Try and schedule the item (already have access to the name of the selected item)s
-
-
-                    //Reset the selected item string so that it can update
-                    selectedItemInDialog = null;
+                    ScheduleItem(); //Schedule the item with the given data
+                    return;
                 }
 
-
-                else { //See if the user entered an item in the one-time option editText
-                    //In the case where they entered a one-time item
+                //See if the user entered an item in the one-time option editText instead of selecting an item in the recyclerview
+                else {
                     if(editTextOneTimeItem.getText().toString().length() != 0) {
-                        selectedItemInDialog = editTextOneTimeItem.getText().toString(); //Extract the name of the item the user entered
-                        //Schedule the item
+                        //Extract and store the name of the item the user entered
+                        selectedItemInDialog = editTextOneTimeItem.getText().toString();
 
+                        //When the item entered this way is legitimate (to stop extremely long names)
+                        if (selectedItemInDialog.length() >= MIN_ITEM_LENGTH && selectedItemInDialog.length() <= MAX_ITEM_LENGTH) {
+                            ScheduleItem();
+                            return;
+                        }
 
-
-                        selectedItemInDialog = null; //Reset the item
+                        //Inform the user about the error case about having an item greater than the maximum length
+                        if (selectedItemInDialog.length() > MAX_ITEM_LENGTH) {
+                            Toast.makeText(getContext(), "Your item name needs to be under 100 characters long!", Toast.LENGTH_LONG).show();
+                            return;
+                        }
                     }
 
                     else {
@@ -244,7 +273,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
                         //If the specified time is possible
                         if(ScheduledTimeLegitimate(startTimeInMs, endTimeInMs, currentTimeInMs, v.getContext())) {
                             //Convert the selected time to a readable format
-                            Time startTime = new Time(startTimeInMs - midDayInMs); //Set the correct time, adjusting for a default value of mid day.
+                            startTime = new Time(startTimeInMs - midDayInMs); //Set the correct time, adjusting for a default value of mid day.
 
                             //Update the start time text view
                             startTimeSelected.setText(startTime.toString()); //Show the user what time they selected
@@ -291,7 +320,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
                         //If the specified time is possible
                         if(ScheduledTimeLegitimate(startTimeInMs, endTimeInMs, currentTimeInMs, v.getContext())) {
                             //Store the entered time value
-                            Time endTime = new Time(endTimeInMs - midDayInMs); //Set the correct time, adjusting for a default value of mid day.
+                            endTime = new Time(endTimeInMs - midDayInMs); //Set the correct time, adjusting for a default value of mid day.
 
                             //Update the end time text view
                             endTimeSelected.setText(endTime.toString()); //Show the user what time they selected
@@ -310,6 +339,227 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
             }
         });
     }
+
+    //This method uses the available data to input into the main recycler view in the schedule tab. It will format the entered so that it is displayed effectively.
+    public void ScheduleItem() {
+        //TODO: Format the selected item name before adding to a list
+        String fullUnformattedItem = selectedItemInDialog; //The base item for the full item is the entered item name.
+        String fullFormattedItem = FormatSchedulingItem(fullUnformattedItem); //Format the full unformatted item with times if they were entered
+
+        //Add the formatted item to the list of scheduled items
+        scheduledItemList.addLast(fullFormattedItem);
+        scheduleItemListAdapter.notifyDataSetChanged(); //Refresh the recycleview to make the item appear
+
+        //Reset the values that were used so that successive dialog uses can work fine
+        selectedItemInDialog = null;
+        startTime = null;
+        endTime = null;
+    }
+
+    //This method takes in an item to format to allow for a visual distinction between the item name and the entered times of the item
+    //It will pad short items accordingly to make the item times line up in the scheduled time tab.
+    //It insert newline characters to put longer items on multiple lines to allow the times to be aligned correctly.
+    public String FormatSchedulingItem(String enteredItem) {
+        //--Declare and initialise DisplayMetrics object used to find the width of the display--
+        DisplayMetrics dm = new DisplayMetrics();
+        ((Activity)getContext()).getWindowManager().getDefaultDisplay().getMetrics(dm); //Obtain the metrics of the display
+
+        //Get and log the width of the screen
+        recyclerViewWidth = dm.widthPixels - 8 - 8;
+
+        //---Calculate the width of the times the user entered---
+        //When user enters start and end time
+        if(startTime != null && endTime != null) {
+            timeTextWidth = scheduledItemPaint.measureText(startTime + " - " + endTime); //Measure the width of the start and end time
+        }
+
+        //When the user only enters a start time or an end time
+        else if(startTime != null ) timeTextWidth = scheduledItemPaint.measureText(startTime + " - n/a");
+        else if(endTime != null) timeTextWidth = scheduledItemPaint.measureText("n/a - " + endTime);
+        else timeTextWidth = scheduledItemPaint.measureText("n/a - n/a"); //When user enters no time values
+
+        //Calculate the amount of padding required to appropriately pad the time to the end of the recyclerview
+        float itemBoundaryDifference = recyclerViewWidth - scheduledItemPaint.measureText(enteredItem) - timeHeaderPaint.measureText(getString(R.string.text_time)) - 12 - scheduledItemPaint.measureText("aa");
+        //-----Pad short items appropriately-----
+        if(itemBoundaryDifference >= 0) {
+            //Calculate the required padding to the end of the recyclerview
+            float paddingToEnd = recyclerViewWidth - scheduledItemPaint.measureText(enteredItem) - timeTextWidth - scheduledItemPaint.measureText("aaa");
+            String paddedItem = enteredItem + GetPadding(paddingToEnd);
+
+            //--Append the selected times to the item if they were entered--
+            //Time displaying takes the format: startTime - EndTime where if startTime or endTime are null, n/a is substituted to show the user what the single time entry is for.
+            if(startTime != null && endTime != null) paddedItem += startTime + " - " + endTime; //In the case where both items are entered
+            else if (startTime != null) paddedItem += startTime + " - n/a"; //In the case where only start item is entered
+            else if (endTime != null) paddedItem += "n/a - " + endTime; //In the case where only end item is entered
+            else paddedItem += "n/a - n/a"; //When the user enters no start time and no end time
+
+            return paddedItem; //The item is final and complete now
+        }
+
+        //-----Split up longer items onto new line(s)-----
+        else return FormatLongItemName(enteredItem);
+    }
+
+    //This method will take in long items that span across one or more lines, and return an appropriately split and padded item such that the time text is visually separated from the item text.
+    //This allows a predictable placement of items and scheduled time, for readability purposes.
+    public String FormatLongItemName(String enteredItem) {
+        String workingItem = enteredItem; //Initialise with entered item
+        String fullItem = ""; //Will be build up, formatted line by formatted line until it is done
+        String excessItem = "";
+        String splitEnteredItem = "";
+        boolean firstLine = true; //The first line has the time text and needs to be distinguished from nth lines
+        boolean itemWordTooLong = false; //Is made true when a single word is too long
+
+        //Keep formatting until the working item is an acceptable length
+        while(true) {
+            if(excessItem != "") workingItem = excessItem; //After a line has been split and still has text, update the working item
+
+            float workingItemBoundaryDifference = recyclerViewWidth - scheduledItemPaint.measureText(workingItem) - timeHeaderPaint.measureText(getString(R.string.text_time)) - 12 - scheduledItemPaint.measureText("aa");
+            //If the working item is not too long
+            if (workingItemBoundaryDifference >= 0) {
+                fullItem += workingItem; //Build the final full item and return
+                return fullItem;
+            }
+
+            String[] workingItemWords = workingItem.split(" "); //Extract the words of the working item
+
+            //Iterate through the words backwards
+            for (int word = workingItemWords.length - 1; word >= 0; word--) {
+
+                //--check for and fix massive clumps of characters that are sufficiently wide to cause problems--
+                //When the single word is enough to break the boundary line
+                if(recyclerViewWidth - scheduledItemPaint.measureText(workingItemWords[word]) - timeHeaderPaint.measureText(getString(R.string.text_time)) - 12 - scheduledItemPaint.measureText("aa") < 0) {
+                    itemWordTooLong = true;
+
+                    String splitWords = SplitLongItemWord(workingItemWords[word]) + " "; //Get the acceptable individual words from the big word
+                    //--Update the workingItemWords--
+                    //Get the words before the big word
+                    String previousWords = "";
+                    for(int i = 0; i < word; i++) previousWords += workingItemWords[i] + " ";
+
+                    //Get the words after the big word, if there are any
+                    String afterWords = "";
+                    if(workingItemWords.length - 1 > word) {
+                        for(int j = word + 1; j <= workingItemWords.length - 1; j++) {
+                            afterWords += workingItemWords[j];
+                            if(j != workingItemWords.length - 1) afterWords += " "; //Avoid having a space at the end of the string
+                        }
+                    }
+
+                    String newWorkingItemWords = previousWords + splitWords +  afterWords;
+                    splitEnteredItem = newWorkingItemWords;
+                    workingItem = newWorkingItemWords; //Update the working item to include the broken up big word
+                    break;
+                }
+
+                //--Delete the last word from the string--
+                int endingIndex = workingItem.length() - 1 - workingItemWords[word].length();
+                workingItem = workingItem.substring(0, endingIndex); //Delete the last word
+
+                //Get the boundary difference with the now shortened word
+                workingItemBoundaryDifference = recyclerViewWidth - scheduledItemPaint.measureText(workingItem) - timeHeaderPaint.measureText(getString(R.string.text_time)) - 12 - scheduledItemPaint.measureText("aa");
+
+                //If the now-shortened item is not too long
+                if(workingItemBoundaryDifference >= 0) {
+                    workingItem += " "; //Add the space, to account for the splitting
+
+                    if(firstLine) {
+                        //Extract the excess item
+                        if(!itemWordTooLong) excessItem = enteredItem.substring(workingItem.length()); //Obtain the part of the item that was separated. Must be done before the time is added back to the item
+                        else excessItem = splitEnteredItem.substring(workingItem.length());
+
+                        //Add the extra padding to move the time value to the end of the recyclerview
+                        float paddingToEnd = recyclerViewWidth - scheduledItemPaint.measureText(workingItem) - timeTextWidth - scheduledItemPaint.measureText("aaa"); //Safe buffer of three characters to prevent extending onto the next line if given measurements are not completely accurate
+                        workingItem += GetPadding(paddingToEnd); //Add on the necessary padding to make the time value sit at the end of the recyclerview
+
+                        //--Append the selected times to the item if they were entered--
+                        //Time displaying takes the format: startTime - EndTime where if startTime or endTime are null, n/a is substituted to show the user what the single time entry is for.
+                        if(startTime != null && endTime != null) workingItem += startTime + " - " + endTime; //In the case where both items are entered
+                        else if (startTime != null) workingItem += startTime + " - n/a"; //In the case where only start item is entered
+                        else if (endTime != null) workingItem += "n/a - " + endTime; //In the case where only end item is entered
+                        else workingItem += "n/a - n/a"; //When the user enters no start time and no end time
+
+                        workingItem += "\n"; //Add a new line to put extra text cleanly on its own line
+                        fullItem += workingItem;
+
+                        firstLine = false; //It is not the first line anymore
+                        break;
+                    }
+
+                    //For lines other than the first line
+                    else {
+                        excessItem = excessItem.substring(workingItem.length()); //Obtain the part of the item that was separated, from the old excess item
+                        fullItem += workingItem + "\n"; //Add this acceptable line to the full item
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    //This method deals with the cases where the user puts in a collection of characters with no space that is large enough to break the boundary for the time text
+    //It will split the long 'word' at an appropriate point that no longer breaks the boundary
+    public String SplitLongItemWord(String longItemWord) {
+        String workingWord = longItemWord; //Initialise with the long item word, which is shortened later
+        String excessWord = "";
+        String splitWords = ""; //Split words by space in one string, for ease of implementation by the FormatLongItemName method
+
+        while(true) {
+            if(excessWord != "") workingWord = excessWord; //After a line has been split and still has text, update the working item
+
+            float wordBoundaryDifference = recyclerViewWidth - scheduledItemPaint.measureText(workingWord) - timeHeaderPaint.measureText(getString(R.string.text_time)) - 12 - scheduledItemPaint.measureText("aa");
+
+            //If the working word is not too long, build and complete the finished word
+            if (wordBoundaryDifference >= 0) {
+                splitWords += workingWord; //Build the final full item and return
+                return splitWords;
+            }
+
+            char[] wordCharacters = workingWord.toCharArray(); //Extract the characters of the long 'word'
+
+            //Iterate through the characters, from the end to the start
+            for(int character = wordCharacters.length - 1; character >= 0; character--) {
+                //Delete the last character from the original word
+                int endingIndex = workingWord.length() - 1 - 1;
+                workingWord = workingWord.substring(0, endingIndex); //Delete the last character
+
+                //Calculate the new boundary difference
+                wordBoundaryDifference = recyclerViewWidth - scheduledItemPaint.measureText(workingWord) - timeHeaderPaint.measureText(getString(R.string.text_time)) - 12 - scheduledItemPaint.measureText("aa");
+
+                //When the word is now an acceptable length
+                if(wordBoundaryDifference > 0) {
+                    splitWords += workingWord + " "; //Add the acceptable word to the full word
+
+                    //Extract the excess item
+                    if(excessWord == "") {
+                        excessWord = longItemWord.substring(workingWord.length());
+                    }
+
+                    else excessWord = excessWord.substring(workingWord.length()); //Obtain the part of the item that was separated, from the old excess item
+
+                    break;
+                }
+            }
+        }
+    }
+
+    public String GetPadding(float widthToPad) {
+
+        //Measure the width of one pad unit in pixels
+        String padUnit = " "; //One unit of padding is one space
+        float padUnitWidth = scheduledItemPaint.measureText(padUnit);
+
+        double numberOfPadsRequired = Math.floor(widthToPad / padUnitWidth); //Round down the number of pads required. Padding less is better than padding too much
+        String pad = "";
+
+        //Add the correct number of pads to the item
+        for(int pads = 0; pads < numberOfPadsRequired; pads++) {
+            pad += padUnit;
+        }
+
+        return pad;
+    }
+
 
     /* This method performs a series of checks to ensure that the schedule time(s) are able to be realistically completed. If the time is confirmed to be legit, true is returned.
     Appropriate error messages are displayed via Toasts when the selected time is not legit. */
