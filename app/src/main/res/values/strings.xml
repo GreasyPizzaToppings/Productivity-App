@@ -12,7 +12,7 @@
     <string name="text_time">Scheduled Time</string>
     <string name="item_name">Item Name</string>
     <string name="hint_one_time_item_name">One-Time Item Name</string>
-    <string name="define_item_time"><![CDATA[(Optional) Define Start & OR End Times]]></string>
+    <string name="define_item_time"><![CDATA[Define Start & OR End Times]]></string>
     <string name="one_time_item">OR Select A One-Time Item</string>
     <string name="existing_item">Select An Existing Item</string>
     <string name="select_item">Select An Item To Schedule</string>

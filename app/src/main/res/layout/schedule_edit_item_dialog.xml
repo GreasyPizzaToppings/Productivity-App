@@ -19,85 +19,56 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <TextView
-        android:id="@+id/text_select_item_heading"
+        android:id="@+id/text_edit_item_heading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="@string/select_item"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="18sp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Scheduled Item Properties"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textSize="21sp"
         android:typeface="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_message" />
 
     <TextView
-        android:id="@+id/text_select_existing"
+        android:id="@+id/text_edit_scheduled_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="@string/existing_item"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerview_schedule_dialog"
-        app:layout_constraintEnd_toEndOf="@+id/recyclerview_schedule_dialog"
-        app:layout_constraintHorizontal_bias="0.515"
-        app:layout_constraintStart_toStartOf="@+id/recyclerview_schedule_dialog"
-        app:layout_constraintTop_toBottomOf="@+id/text_select_item_heading" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview_schedule_dialog"
-        android:layout_width="0dp"
-        android:layout_height="157dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:background="#00C9C4C4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_select_existing" />
-
-    <TextView
-        android:id="@+id/text_select_one_time_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
         android:layout_marginTop="16dp"
-        android:text="@string/one_time_item"
+        android:text="Edit Item Name"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintEnd_toEndOf="@+id/edit_one_time_item"
-        app:layout_constraintStart_toStartOf="@+id/edit_one_time_item"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerview_schedule_dialog" />
-
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/edit_scheduled_item_name"
+        app:layout_constraintTop_toBottomOf="@+id/text_edit_item_heading" />
 
     <EditText
-        android:id="@+id/edit_one_time_item"
+        android:id="@+id/edit_scheduled_item_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:ems="10"
-        android:hint="@string/hint_one_time_item_name"
+        android:hint="Scheduled Item Name"
         android:importantForAutofill="no"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_select_one_time_item"
+        app:layout_constraintTop_toBottomOf="@+id/text_edit_scheduled_item_name"
         tools:targetApi="o" />
 
-
     <TextView
-        android:id="@+id/text_select_time_heading"
+        android:id="@+id/text_edit_time_heading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -105,14 +76,13 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:text="@string/define_item_time"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="18sp"
+        android:text="Edit Start &amp; OR End Times"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textSize="21sp"
         android:typeface="normal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edit_one_time_item" />
+        app:layout_constraintTop_toBottomOf="@id/edit_scheduled_item_name" />
 
     <TextView
         android:id="@+id/text_start_time"
@@ -122,23 +92,22 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/start_time"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_select_time_heading" />
+        app:layout_constraintTop_toBottomOf="@+id/text_edit_time_heading" />
 
     <Button
         android:id="@+id/button_start_time"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="@string/choose"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Update"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/text_start_time_selected"
-        app:layout_constraintTop_toBottomOf="@+id/text_select_time_heading" />
+        app:layout_constraintTop_toBottomOf="@+id/text_edit_time_heading" />
 
     <TextView
         android:id="@+id/text_end_time"
@@ -149,6 +118,8 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
         android:text="@string/end_time"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/button_end_time"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -159,35 +130,44 @@
         android:id="@+id/button_end_time"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="@string/choose"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Update"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/text_end_time_selected"
-        app:layout_constraintTop_toBottomOf="@+id/button_start_time" />
+        app:layout_constraintTop_toBottomOf="@+id/text_start_time" />
 
     <TextView
-        android:id="@+id/text_start_time_selected"
+        android:id="@+id/text_update_start_time_selected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="100dp"
-        android:layout_marginRight="100dp"
-        android:text="@string/awaiting_selection"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/text_start_time"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/button_start_time"
         app:layout_constraintTop_toTopOf="@+id/text_start_time" />
 
     <TextView
-        android:id="@+id/text_end_time_selected"
+        android:id="@+id/text_update_end_time_selected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/awaiting_selection"
-        app:layout_constraintEnd_toEndOf="@+id/text_start_time_selected"
-        app:layout_constraintStart_toStartOf="@+id/text_start_time_selected"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/button_end_time"
         app:layout_constraintTop_toTopOf="@+id/text_end_time" />
+
+    <CheckBox
+        android:id="@+id/checkBox_mark_as_completed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="16dp"
+        android:text="Mark As Completed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_end_time" />
 </android.support.constraint.ConstraintLayout>

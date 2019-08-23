@@ -7,25 +7,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import java.util.LinkedList;
-
 
 //This adapter is much like the ItemListAdapter, except it is for use inside an AlertDialog in the ScheduleFragment only. It has different onClick functionality that is distinctly different to the ItemListAdapter.
 public class ScheduleDialogItemListAdapter extends RecyclerView.Adapter<ScheduleDialogItemListAdapter.ItemViewHolder> {
     private LayoutInflater mInflater;
     private final LinkedList<String> itemList; //The list of the physical data, such as item 1, item 2, etc.
     private LinkedList<TextView> itemViewHolderList; //The list of the text view elements which are the item view holder
-    private ScheduleAdapterInterface adapterInterface;
+    private AddScheduledItemInterface adapterInterface;
     private TextView previouslySelectedItem;
 
-
-    public interface ScheduleAdapterInterface {
+    //This interface tells the ScheduleFragment what item was selected, to enable the functionality of the schedule new item dialog.
+    public interface AddScheduledItemInterface {
         void OnClickDialogItem(String itemName, boolean selected);
     }
 
     //Constructor for the class, for the context of the schedule fragment.
-    public ScheduleDialogItemListAdapter(ScheduleFragment context, LinkedList<String> itemList, ScheduleAdapterInterface scheduleAdapterInterface) {
+    public ScheduleDialogItemListAdapter(ScheduleFragment context, LinkedList<String> itemList, AddScheduledItemInterface scheduleAdapterInterface) {
         mInflater = LayoutInflater.from(context.getActivity()); //Initialise the inflater used to inflate the layout the view holder for each item
         this.itemList = itemList; //Establish a connection between the list from the context of the ScheduleFragment, and this context in the adapter
         this.adapterInterface = scheduleAdapterInterface; //Establish the connection between the interface between the fragment and the adapter
@@ -74,7 +72,7 @@ public class ScheduleDialogItemListAdapter extends RecyclerView.Adapter<Schedule
     @NonNull
     @Override
     public ScheduleDialogItemListAdapter.ItemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View mItemView = mInflater.inflate(R.layout.itemlist_item, viewGroup, false);
+        View mItemView = mInflater.inflate(R.layout.item_list_item, viewGroup, false);
         return new ItemViewHolder(mItemView, this);
     }
 

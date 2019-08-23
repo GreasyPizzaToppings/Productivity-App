@@ -127,7 +127,7 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //Extract the string and add it to the recyclerview
-                EditText editItemName = ((AlertDialog) dialog).findViewById(R.id.edit_one_time_item);
+                EditText editItemName = ((AlertDialog) dialog).findViewById(R.id.edit_scheduled_item_name);
                 String userItemName = editItemName.getText().toString();
 
                 //If the user entered a valid name for the new item

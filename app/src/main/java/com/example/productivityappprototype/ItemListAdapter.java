@@ -1,6 +1,5 @@
 package com.example.productivityappprototype;
 
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -10,10 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 import java.util.LinkedList;
 
@@ -66,7 +63,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             View dialogView = inflater.inflate(R.layout.item_dialog, null); //Inflate the custom layout into a view
 
             //Attempt to get a handle on the edit text ui component inside to set the text to the current item so the user knows what item they are editing
-            EditText itemEditText = dialogView.findViewById(R.id.edit_one_time_item);
+            EditText itemEditText = dialogView.findViewById(R.id.edit_scheduled_item_name);
 
             //Set the edit text to the current name of the item for increased UI ease of access
             int itemIndex = getLayoutPosition();
@@ -105,7 +102,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //Get a handle on the edittext in the custom layout
-                    EditText editItemName = ((AlertDialog) dialog).findViewById(R.id.edit_one_time_item);
+                    EditText editItemName = ((AlertDialog) dialog).findViewById(R.id.edit_scheduled_item_name);
                     String newItemName = editItemName.getText().toString();
 
                     //Update the name of the view in the recyclerview
@@ -134,8 +131,6 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             });
 
             builder.setView(dialogView); //Attach this custom layout to the dialog
-
-            //Build and create the dialog
             builder.create().show();
         }
     }
@@ -159,7 +154,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     @NonNull
     @Override
     public ItemListAdapter.ItemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View mItemView = mInflater.inflate(R.layout.itemlist_item, viewGroup, false);
+        View mItemView = mInflater.inflate(R.layout.item_list_item, viewGroup, false);
         return new ItemViewHolder(mItemView, this);
     }
 
