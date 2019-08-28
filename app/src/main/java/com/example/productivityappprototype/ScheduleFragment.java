@@ -1,5 +1,4 @@
 package com.example.productivityappprototype;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
@@ -34,8 +33,26 @@ import java.util.Calendar;
 import java.util.LinkedList;
 
 public class ScheduleFragment extends Fragment implements View.OnClickListener, ScheduleDialogItemListAdapter.AddScheduledItemInterface, ScheduleItemListAdapter.UpdateScheduledItemInterface {
-    private SharedPreferences sharedPreferences;
-    private String sharedPreferencesFile = "com.example.productivityappprototype";
+    //Shared preferences objects
+    private SharedPreferences rawScheduledItemsSharedPrefs;
+    private SharedPreferences formattedScheduledItemsSharedPrefs;
+    private SharedPreferences startTimesSharedPrefs;
+    private SharedPreferences endTimesSharedPrefs;
+    private SharedPreferences itemListSharedPrefs;
+
+    //Shared preferences files
+    private String rawScheduledItemsSharedPrefsFile = "com.example.productivityappprototype.raw";
+    private String formattedScheduledItemsSharedPrefsFile = "com.example.productivityappprorotype.formatted";
+    private String startTimesSharedPrefsFile = "com.example.productivityappprototype.startTimes";
+    private String endTimesSharedPrefsFile = "com.example.productivityappprototype.endTimes";
+    private String itemListSharedPrefsFile = "com.example.productivityappprototype";
+
+    //Shared preferences file editors
+    private SharedPreferences.Editor rawScheduledItemsSharedPrefsEditor;
+    private SharedPreferences.Editor formattedScheduledItemsSharedPrefsEditor;
+    private SharedPreferences.Editor startTimesSharedPrefsEditor;
+    private SharedPreferences.Editor endTimesSharedPrefsEditor;
+
     private final String ITEM_NOT_FOUND = "";
     private final String baseItemKey = "item:"; //The base key used to store the items in the bundle
 
@@ -66,8 +83,15 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        DisplayMetrics dm = new DisplayMetrics();
+        ((Activity)getContext()).getWindowManager().getDefaultDisplay().getMetrics(dm); //Obtain the metrics of the display
+        outState.putInt("displayWidth", dm.widthPixels); //Save the width of the current device configuration. This is used to determine whether the formatted items need to be re-formatted to fit the new screen width
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.schedule_fragment, container, false);
 
@@ -94,6 +118,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         //Get a handle to the floating action button and set its on click listener
         FloatingActionButton scheduleTaskButton = v.findViewById(R.id.fb_schedule_item);
         scheduleTaskButton.setOnClickListener(this);
+
         return v;
     }
 
@@ -120,24 +145,60 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         //Initialise paint objects used by the 3 related scheduled item formatting methods
         timeHeaderPaint = timeHeaderTextView.getPaint(); //Used to calculate the width of the header to calculate the boundary
         scheduledItemPaint = itemWidthMeasuringContainer.getPaint();
+
+        //Initialise the shared pref objects
+        rawScheduledItemsSharedPrefs = getActivity().getSharedPreferences(rawScheduledItemsSharedPrefsFile, Context.MODE_PRIVATE);
+        formattedScheduledItemsSharedPrefs = getActivity().getSharedPreferences(formattedScheduledItemsSharedPrefsFile, Context.MODE_PRIVATE);
+        startTimesSharedPrefs = getActivity().getSharedPreferences(startTimesSharedPrefsFile, Context.MODE_PRIVATE);
+        endTimesSharedPrefs = getActivity().getSharedPreferences(endTimesSharedPrefsFile, Context.MODE_PRIVATE);
+
+        //---Restore the data from the shared preferences files, except for the formatted items---
+        rawScheduledItems = restoreValuesFromSharedPrefsFile(rawScheduledItemsSharedPrefs, rawScheduledItems);
+        scheduledItemsStartTimes = restoreValuesFromSharedPrefsFile(startTimesSharedPrefs, scheduledItemsStartTimes);
+        scheduledItemsEndTimes = restoreValuesFromSharedPrefsFile(endTimesSharedPrefs, scheduledItemsEndTimes);
+
+        //Look at bundle data to determine if items need to be reformatted or just read from the file
+        if(savedInstanceState != null) {
+            DisplayMetrics dm = new DisplayMetrics();
+            ((Activity)getContext()).getWindowManager().getDefaultDisplay().getMetrics(dm); //Obtain the metrics of the display
+            //If the old display width does not match the current display width
+            if(savedInstanceState.getInt("displayWidth") != dm.widthPixels) {
+                //Re-format the scheduled items
+                Log.e("test", "widths are different. Now reformatting items!");
+
+                Log.e("test", "before reformattingitems, here is the contents of the shared prefs files");
+                reformatScheduledItems();
+
+                Log.e("test", "just reformatted items after a device config change.");
+                LogAllContentsOfSharedPrefsFiles();
+            }
+
+            else { //Just get the old items, as no reformatting is needed
+                formattedScheduledItemsWithTimes = restoreValuesFromSharedPrefsFile(formattedScheduledItemsSharedPrefs, formattedScheduledItemsWithTimes);
+            }
+        }
+        else formattedScheduledItemsWithTimes = restoreValuesFromSharedPrefsFile(formattedScheduledItemsSharedPrefs, formattedScheduledItemsWithTimes);
+
+
+        if(scheduleItemListAdapter != null) scheduleItemListAdapter.notifyDataSetChanged();
     }
 
     //This method will read in the current SharedPreferences file and create the item list to be used by the dialog popup used to schedule an item
     public void UpdateItemList() {
         //--Read the shared preferences file and build an item list for use for the dialog--
-        sharedPreferences = getActivity().getSharedPreferences(sharedPreferencesFile, Context.MODE_PRIVATE); //Initialise the SharedPreferences object and read in the file
+        itemListSharedPrefs = getActivity().getSharedPreferences(itemListSharedPrefsFile, Context.MODE_PRIVATE); //Initialise the SharedPreferences object and read in the file
 
         //Read in the data from the file to build the item list
-        if (!sharedPreferencesFile.isEmpty()) {
+        if (!itemListSharedPrefsFile.isEmpty()) {
             itemList.clear(); //Clear the old list
 
             //Use the bundle size as the linked list gets reinitialised to size 0 after every config change. -1 because there is always a bool variable stored as well
-            for (int item = 0; item < sharedPreferencesFile.length(); item++) {
+            for (int item = 0; item < itemListSharedPrefsFile.length(); item++) {
                 String fullItemKey = baseItemKey + item; //Build the key used to predictably store the items in the file
-                String restoredItem = sharedPreferences.getString(fullItemKey, ITEM_NOT_FOUND); //Blank default values are the error case as you cannot have an item with no length
+                String restoredItem = itemListSharedPrefs.getString(fullItemKey, ITEM_NOT_FOUND); //Blank default values are the error case as you cannot have an item with no length
 
                 //Restore items that were found in the restored shared preference
-                if (restoredItem != ITEM_NOT_FOUND) {
+                if (!restoredItem.equals(ITEM_NOT_FOUND)) {
                     itemList.add(item, restoredItem);
                 }
             }
@@ -339,7 +400,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
 
     //This method uses the available data to input into the main recycler view in the schedule tab. It will format the entered so that it is displayed effectively.
     public void ScheduleItem() {
-        String fullUnformattedItem = selectedItemInDialog; //The base item for the full item is the entered item name.
+        String fullUnformattedItem = selectedItemInDialog; //The base item for the full item is the entered item name. It is also the raw item
         String startTimeInText;
         String endTimeInText;
 
@@ -387,12 +448,60 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         formattedScheduledItemsWithTimes.addLast(fullFormattedItem);
         scheduleItemListAdapter.notifyDataSetChanged(); //Refresh the recycler view to make the item appear
 
+        //---Write the data to the shared preferences files---
+        String fullItemKey = baseItemKey + (formattedScheduledItemsWithTimes.size() - 1); //Build the key, which is the base key + the index of the item
+        rawScheduledItemsSharedPrefsEditor = rawScheduledItemsSharedPrefs.edit();
+        rawScheduledItemsSharedPrefsEditor.putString(fullItemKey, fullUnformattedItem); //The unformatted item is the raw item
+        rawScheduledItemsSharedPrefsEditor.apply();
+
+        formattedScheduledItemsSharedPrefsEditor = formattedScheduledItemsSharedPrefs.edit();
+        formattedScheduledItemsSharedPrefsEditor.putString(fullItemKey, fullFormattedItem);
+        formattedScheduledItemsSharedPrefsEditor.apply();
+
+        startTimesSharedPrefsEditor = startTimesSharedPrefs.edit();
+        startTimesSharedPrefsEditor.putString(fullItemKey, startTimeInText);
+        startTimesSharedPrefsEditor.apply();
+
+        endTimesSharedPrefsEditor = endTimesSharedPrefs.edit();
+        endTimesSharedPrefsEditor.putString(fullItemKey, endTimeInText);
+        endTimesSharedPrefsEditor.apply();
+
         //Reset the values that were used so that successive dialog uses can work fine
         selectedItemInDialog = null;
         startTime = null;
         startTimeInMs = defaultStartEndTimeInMs;
         endTime = null;
         endTimeInMs = defaultStartEndTimeInMs;
+    }
+
+    private void reformatScheduledItems() {
+        formattedScheduledItemsSharedPrefsEditor = formattedScheduledItemsSharedPrefs.edit(); //Initialise editor to be able to update the shared prefs file as items are reformatted
+
+        //Iterate through each item
+        for(int itemIndex = 0; itemIndex < rawScheduledItems.size(); itemIndex++) {
+            //Re-format each item and update the linked list
+            String reformattedScheduledItem = FormatSchedulingItem(rawScheduledItems.get(itemIndex), scheduledItemsStartTimes.get(itemIndex), scheduledItemsEndTimes.get(itemIndex));
+            formattedScheduledItemsWithTimes.addLast(reformattedScheduledItem);
+
+            //Update the shared prefs file with the new formatted items
+            String fullKey = baseItemKey + itemIndex;
+            formattedScheduledItemsSharedPrefsEditor.putString(fullKey, reformattedScheduledItem);
+        }
+
+        formattedScheduledItemsSharedPrefsEditor.apply();
+    }
+
+    private LinkedList<String> restoreValuesFromSharedPrefsFile(SharedPreferences sharedPrefs, LinkedList<String> dataList) {
+        for(int item = 0; item < rawScheduledItemsSharedPrefsFile.length(); item++) { //use the raw scheduled items shared preferences file as it will have the same length as all the other files
+            String fullItemKey = baseItemKey + item; //Build the key used to predictably store the items in the file
+            String restoredValue = sharedPrefs.getString(fullItemKey, ITEM_NOT_FOUND); //Blank default values are the error case as you cannot have an item with no length
+
+            //Restore items that were found in the restored shared preference. Add the items to the specified linked list
+            if (!restoredValue.equals(ITEM_NOT_FOUND)) {
+                dataList.addLast(restoredValue);
+            }
+        }
+        return dataList;
     }
 
     //This method takes in an item to format to allow for a visual distinction between the item name and the entered times of the item
@@ -436,7 +545,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
 
         //Keep formatting until the working item is an acceptable length
         while(true) {
-            if(excessItem != "") workingItem = excessItem; //After a line has been split and still has text, update the working item
+            if(!excessItem.equals("")) workingItem = excessItem; //After a line has been split and still has text, update the working item
 
             float workingItemBoundaryDifference = recyclerViewWidth - scheduledItemPaint.measureText(workingItem) - timeHeaderPaint.measureText(getString(R.string.text_time)) - 12 - scheduledItemPaint.measureText("aa");
             //If the working item is not too long
@@ -455,7 +564,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
                 if(recyclerViewWidth - scheduledItemPaint.measureText(workingItemWords[word]) - timeHeaderPaint.measureText(getString(R.string.text_time)) - 12 - scheduledItemPaint.measureText("aa") < 0) {
                     itemWordTooLong = true;
 
-                    String splitWords = SplitLongItemWord(workingItemWords[word]) + " "; //Get the acceptable individual words from the big word
+                    String splitWords = SplitLongItemWord(workingItemWords[word]); //Get the acceptable individual words from the big word
                     //--Update the workingItemWords--
                     //Get the words before the big word
                     String previousWords = "";
@@ -524,7 +633,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         String splitWords = ""; //Split words by space in one string, for ease of implementation by the FormatLongItemName method
 
         while(true) {
-            if(excessWord != "") workingWord = excessWord; //After a line has been split and still has text, update the working item
+            if(!excessWord.equals("")) workingWord = excessWord; //After a line has been split and still has text, update the working item
 
             float wordBoundaryDifference = recyclerViewWidth - scheduledItemPaint.measureText(workingWord) - timeHeaderPaint.measureText(getString(R.string.text_time)) - 12 - scheduledItemPaint.measureText("aa");
 
@@ -550,12 +659,8 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
                     splitWords += workingWord + " "; //Add the acceptable word to the full word
 
                     //Extract the excess item
-                    if(excessWord == "") {
-                        excessWord = longItemWord.substring(workingWord.length());
-                    }
-
+                    if(excessWord.equals("")) excessWord = longItemWord.substring(workingWord.length());
                     else excessWord = excessWord.substring(workingWord.length()); //Obtain the part of the item that was separated, from the old excess item
-
                     break;
                 }
             }
@@ -578,7 +683,6 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
 
         return pad;
     }
-
 
     /* This method performs a series of checks to ensure that the schedule time(s) are able to be realistically completed. If the time is confirmed to be legit, true is returned.
     Appropriate error messages are displayed via Toasts when the selected time is not legit. */
@@ -654,9 +758,23 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         //Get the new formatted string for the whole item
         String updatedFormattedScheduledItem = FormatSchedulingItem(rawScheduledItems.get(scheduledItemIndex), scheduledItemsStartTimes.get(scheduledItemIndex), scheduledItemsEndTimes.get(scheduledItemIndex));
 
-        //Update the formatted item in the recyclerview
+        //Update the formatted item in the recycler view
         formattedScheduledItemsWithTimes.set(scheduledItemIndex, updatedFormattedScheduledItem);
         scheduleItemListAdapter.notifyDataSetChanged();
+
+        //Update the start time in the shared preferences file
+        String fullItemKey = baseItemKey + scheduledItemIndex;
+        startTimesSharedPrefsEditor = startTimesSharedPrefs.edit();
+        startTimesSharedPrefsEditor.putString(fullItemKey, updatedStartTime);
+        startTimesSharedPrefsEditor.apply();
+
+        //Update the new whole formatted item in the shared preferences file
+        formattedScheduledItemsSharedPrefsEditor = formattedScheduledItemsSharedPrefs.edit();
+        formattedScheduledItemsSharedPrefsEditor.putString(fullItemKey, updatedFormattedScheduledItem);
+        formattedScheduledItemsSharedPrefsEditor.apply();
+
+        Log.e("test", "just updated the start time");
+        LogAllContentsOfSharedPrefsFiles();
     }
 
     @Override
@@ -670,17 +788,46 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         //Update the formatted item in the recyclerview
         formattedScheduledItemsWithTimes.set(scheduledItemIndex, updatedFormattedScheduledItem);
         scheduleItemListAdapter.notifyDataSetChanged();
+
+        //Update the end time in the shared preferences file
+        String fullItemKey = baseItemKey + scheduledItemIndex;
+        endTimesSharedPrefsEditor = endTimesSharedPrefs.edit();
+        endTimesSharedPrefsEditor.putString(fullItemKey, updatedEndTime);
+        endTimesSharedPrefsEditor.apply();
+
+        //Update the new whole formatted item in the shared preferences file
+        formattedScheduledItemsSharedPrefsEditor = formattedScheduledItemsSharedPrefs.edit();
+        formattedScheduledItemsSharedPrefsEditor.putString(fullItemKey, updatedFormattedScheduledItem);
+        formattedScheduledItemsSharedPrefsEditor.apply();
+
+        Log.e("test", "Just updated the end time");
+        LogAllContentsOfSharedPrefsFiles();
     }
 
     @Override
     public void OnUpdateItemName(String newItemName, int scheduledItemIndex) {
-        //update the item names
-        rawScheduledItems.set(scheduledItemIndex, newItemName); //Update the raw item name in the list
+        //Update the local linked list for the raw item names
+        rawScheduledItems.set(scheduledItemIndex, newItemName);
 
         //Get the new whole formatted item
         String updatedFormattedScheduledItem = FormatSchedulingItem(rawScheduledItems.get(scheduledItemIndex), scheduledItemsStartTimes.get(scheduledItemIndex), scheduledItemsEndTimes.get(scheduledItemIndex));
         formattedScheduledItemsWithTimes.set(scheduledItemIndex, updatedFormattedScheduledItem); //Update the formatted items with the new formatted item name
         scheduleItemListAdapter.notifyDataSetChanged();
+
+        //---Update the data in the Shared Prefs Files---
+        //Update the formatted item shared prefs file
+        String fullItemKey = baseItemKey + scheduledItemIndex;
+        formattedScheduledItemsSharedPrefsEditor = formattedScheduledItemsSharedPrefs.edit();
+        formattedScheduledItemsSharedPrefsEditor.putString(fullItemKey, updatedFormattedScheduledItem);
+        formattedScheduledItemsSharedPrefsEditor.apply();
+
+        //Update the raw item shared prefs file
+        rawScheduledItemsSharedPrefsEditor = rawScheduledItemsSharedPrefs.edit();
+        rawScheduledItemsSharedPrefsEditor.putString(fullItemKey, newItemName);
+        rawScheduledItemsSharedPrefsEditor.apply();
+
+        Log.e("test","Just updated item name");
+        LogAllContentsOfSharedPrefsFiles();
     }
 
     @Override
@@ -692,5 +839,70 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         scheduledItemsEndTimes.remove(scheduledItemIndex);
 
         scheduleItemListAdapter.notifyDataSetChanged();
+
+        //---Remove all the data from the relevant shared preferences files---
+        //Remove the formatted scheduled item
+        formattedScheduledItemsSharedPrefsEditor = formattedScheduledItemsSharedPrefs.edit();
+        RemoveItemInSharedPrefsFileAt(formattedScheduledItemsWithTimes, formattedScheduledItemsSharedPrefsEditor, scheduledItemIndex);
+
+        //Remove the raw scheduled item
+        rawScheduledItemsSharedPrefsEditor = rawScheduledItemsSharedPrefs.edit();
+        RemoveItemInSharedPrefsFileAt(rawScheduledItems, rawScheduledItemsSharedPrefsEditor, scheduledItemIndex);
+
+        //Remove the start and end times
+        startTimesSharedPrefsEditor = startTimesSharedPrefs.edit();
+        RemoveItemInSharedPrefsFileAt(scheduledItemsStartTimes, startTimesSharedPrefsEditor, scheduledItemIndex);
+        endTimesSharedPrefsEditor = endTimesSharedPrefs.edit();
+        RemoveItemInSharedPrefsFileAt(scheduledItemsEndTimes,endTimesSharedPrefsEditor, scheduledItemIndex);
+
+        //Apply all the changes
+        formattedScheduledItemsSharedPrefsEditor.apply();
+        rawScheduledItemsSharedPrefsEditor.apply();
+        startTimesSharedPrefsEditor.apply();
+        endTimesSharedPrefsEditor.apply();
+
+        Log.e("test", "just unscheduled an item");
+        LogAllContentsOfSharedPrefsFiles();
+    }
+
+    //This method will move the data elements in the shared preferences file provided back one starting at a given point. This is an effective way of deleting an item and removing gaps in the data.
+    //Note: This method needs to be called after the item has already been deleted from the associated linkedList datalist.
+    public void RemoveItemInSharedPrefsFileAt(LinkedList<String> dataList, SharedPreferences.Editor editor, int indexDelete) {
+        //Move the items after this element back one, overwriting the data which effectively deletes the unwanted item.
+        for(int indexItem = indexDelete; indexItem < dataList.size(); indexItem++) { //Using the rawScheduledItems linked list, as all the lists should have the same length
+            //Build the key
+            String finalItemKey = baseItemKey + indexItem;
+            editor.putString(finalItemKey, dataList.get(indexItem)); //Move the items back one
+        }
+
+        //Delete the last item to remove the double-up of the last item
+        editor.remove(baseItemKey + dataList.size());
+        editor.apply();
+    }
+
+    public void LogAllContentsOfSharedPrefsFiles() {
+        //Log the data in the raw scheduled items shared prefs file, if it is not the default value.
+        for(int i = 0; i < rawScheduledItemsSharedPrefsFile.length(); i++) {
+            String fullKey = baseItemKey + i;
+            if(!rawScheduledItemsSharedPrefs.getString(fullKey, "default").equals("default")) Log.e("raw sP file", i + ": '" + rawScheduledItemsSharedPrefs.getString(fullKey, "defaultvalue") + "'"); //Print the value out
+        }
+
+        //Log the data in the whole formatted scheduled items shared prefs file
+        for(int i = 0; i < formattedScheduledItemsSharedPrefsFile.length(); i++) {
+            String fullKey = baseItemKey + i;
+            if(!formattedScheduledItemsSharedPrefs.getString(fullKey, "default").equals("default")) Log.e("formatted sP file", i + ": '" + formattedScheduledItemsSharedPrefs.getString(fullKey, "defaultvalue") + "'"); //Print the value out
+        }
+
+        //Log the data in the start times shared prefs file
+        for(int i = 0; i < startTimesSharedPrefsFile.length(); i++) {
+            String fullKey = baseItemKey + i;
+            if(!startTimesSharedPrefs.getString(fullKey, "default").equals("default")) Log.e("start times sP file", i + ": '" + startTimesSharedPrefs.getString(fullKey, "defaultvalue") + "'"); //Print the value out
+        }
+
+        //Log the data in the end items shared prefs file
+        for(int i = 0; i < endTimesSharedPrefsFile.length(); i++) {
+            String fullKey = baseItemKey + i;
+            if(!endTimesSharedPrefs.getString(fullKey, "default").equals("default")) Log.e("end times sP file", i + ": '" + endTimesSharedPrefs.getString(fullKey, "defaultvalue") + "'"); //Print the value out
+        }
     }
 }

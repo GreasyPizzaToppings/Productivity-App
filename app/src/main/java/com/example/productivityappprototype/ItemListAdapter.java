@@ -21,17 +21,17 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     private final int MAX_ITEM_LENGTH = 100;
     private final int MIN_ITEM_LENGTH = 1;
     private final String baseItemKey = "item:"; //The base key used to store the items in the bundle
-    private SharedPreferences sharedPreferences;
-    private String sharedPreferencesFile = "com.example.productivityappprototype";
-    private SharedPreferences.Editor preferencesEditor;
+    private SharedPreferences itemListSharedPrefs;
+    private String itemListSharedPrefsFile = "com.example.productivityappprototype";
+    private SharedPreferences.Editor itemListSharedPrefsEditor;
 
     public ItemListAdapter(ItemListFragment context, LinkedList<String> itemList) {
         mInflater = LayoutInflater.from(context.getActivity());
         this.itemList = itemList;
 
         //Initialise the SharedPreferences object
-        sharedPreferences = context.getActivity().getSharedPreferences(sharedPreferencesFile, Context.MODE_PRIVATE);
-        preferencesEditor = sharedPreferences.edit(); //Initialise the editor
+        itemListSharedPrefs = context.getActivity().getSharedPreferences(itemListSharedPrefsFile, Context.MODE_PRIVATE);
+        itemListSharedPrefsEditor = itemListSharedPrefs.edit(); //Initialise the editor
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -113,8 +113,8 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
 
                         //Update the value in the shared preferences file
                         String fullItemKey = baseItemKey + itemIndex; //get the key of the changed item
-                        preferencesEditor.putString(fullItemKey, newItemName);
-                        preferencesEditor.apply();
+                        itemListSharedPrefsEditor.putString(fullItemKey, newItemName);
+                        itemListSharedPrefsEditor.apply();
 
                         return; //No need to check for invalid cases
                     }
@@ -142,12 +142,12 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             //Build the key
             String finalItemKey = baseItemKey + indexItem;
 
-            preferencesEditor.putString(finalItemKey, itemList.get(indexItem));
+            itemListSharedPrefsEditor.putString(finalItemKey, itemList.get(indexItem));
         }
 
         //Delete the last item to remove the double-up of the last item
-        preferencesEditor.remove((baseItemKey + itemList.size()));
-        preferencesEditor.apply();
+        itemListSharedPrefsEditor.remove((baseItemKey + itemList.size()));
+        itemListSharedPrefsEditor.apply();
     }
 
 

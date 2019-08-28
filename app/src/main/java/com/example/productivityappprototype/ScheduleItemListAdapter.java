@@ -108,11 +108,12 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
                     String oldItemName = rawScheduledItems.get(scheduledItemIndex);
                     String newItemName = scheduledItemEditText.getText().toString();
 
-                    //If the user changes the name of the scheduled item. Else, just close the dialog
+                    //If the user changes the name of the scheduled item.
                     if(oldItemName != newItemName){
                         //If the new name is legitimate
                         if(newItemName.length() >= MIN_ITEM_LENGTH && newItemName.length() <= MAX_ITEM_LENGTH) {
-                            //Update the item name
+                            rawScheduledItems.set(scheduledItemIndex, newItemName); //Update the local linked list with the new name
+                            //Update the linked lists and shared prefs files in the fragment
                             adapterInterface.OnUpdateItemName(newItemName, scheduledItemIndex);
                             return;
                         }
@@ -138,7 +139,7 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
                     int buttonStartMinute = currentTime.get(Calendar.MINUTE);
 
                     //Update the default time picker values if they the user has chosen a time before
-                    if(scheduledItemsStartTimes.get(scheduledItemIndex) != "n/a") {
+                    if(!scheduledItemsStartTimes.get(scheduledItemIndex).equals("n/a")) {
                         buttonStartHour = Integer.parseInt(scheduledItemsStartTimes.get(scheduledItemIndex).substring(0,2)); //get the first two characters, which is the start hour
                         buttonStartMinute = Integer.parseInt(scheduledItemsStartTimes.get(scheduledItemIndex).substring(3,5)); //get the third and fourth characters, which is the time in minutes
                     }
@@ -192,7 +193,7 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
                     int buttonEndMinute = currentTime.get(Calendar.MINUTE);
 
                     //Update the default time picker values if they the user has chosen a time before
-                    if(scheduledItemsEndTimes.get(scheduledItemIndex) != "n/a") {
+                    if(!scheduledItemsEndTimes.get(scheduledItemIndex).equals("n/a")) {
                         buttonEndHour = Integer.parseInt(scheduledItemsEndTimes.get(scheduledItemIndex).substring(0,2)); //get the first two characters, which is the start hour
                         buttonEndMinute = Integer.parseInt(scheduledItemsEndTimes.get(scheduledItemIndex).substring(3,5)); //get the third and fourth characters, which is the time in minutes
                     }

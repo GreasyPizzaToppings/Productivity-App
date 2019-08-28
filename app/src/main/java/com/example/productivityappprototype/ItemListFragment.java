@@ -1,7 +1,3 @@
-//TODO
-//Save the items that the user manually put into the item list when a device configuration change occurs
-//Have one-time creation of sample data so that when you rotate the device, the sample data will get deleted, to make things easier to work with? Maybe some other solution? I don't understand.
-
 package com.example.productivityappprototype;
 
 import android.content.DialogInterface;
@@ -31,16 +27,15 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
     private final int MAX_ITEM_LENGTH = 100;
     private final int MIN_ITEM_LENGTH = 1;
     private final String baseItemKey = "item:"; //The base key used to store the items in the bundle
-    private SharedPreferences sharedPreferences;
-    private String sharedPreferencesFile = "com.example.productivityappprototype";
-    private SharedPreferences.Editor preferencesEditor;
+    private SharedPreferences itemListSharedPrefs;
+    private String itemListSharedPrefsFile = "com.example.productivityappprototype";
+    private SharedPreferences.Editor itemListSharedPrefsEditor;
     private final String ITEM_NOT_FOUND = "";
 
     /*The maximum number of items that can be contained within the item list recycler view. For potential performance reasons, this is limited.
     Also, if the user has more than 100 things to do, they SHOULD remove some items and prioritise.
     */
     private final int MAX_NO_ITEMS = 100;
-
 
     public ItemListFragment() {
         // Required empty public constructor
@@ -58,15 +53,15 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
         addItemButton.setOnClickListener(this);
 
         //Initialise the SharedPreferences object
-        sharedPreferences = getActivity().getSharedPreferences(sharedPreferencesFile, MODE_PRIVATE);
-        preferencesEditor = sharedPreferences.edit(); //Initialise the editor
+        itemListSharedPrefs = getActivity().getSharedPreferences(itemListSharedPrefsFile, MODE_PRIVATE);
+        itemListSharedPrefsEditor = itemListSharedPrefs.edit(); //Initialise the editor
 
         //Restore the data from the SharedPreferences file
-        if(!sharedPreferencesFile.isEmpty()) {
+        if(!itemListSharedPrefsFile.isEmpty()) {
             //Use the bundle size as the linked list gets reinitialised to size 0 after every config change. -1 because there is always a bool variable stored as well
-            for(int item = 0; item < sharedPreferencesFile.length(); item++) {
+            for(int item = 0; item < itemListSharedPrefsFile.length(); item++) {
                 String fullItemKey = baseItemKey + item; //Build the key used to predictably store the items in the file
-                String restoredItem = sharedPreferences.getString(fullItemKey, ITEM_NOT_FOUND); //Blank default values are the error case as you cannot have an item with no length
+                String restoredItem = itemListSharedPrefs.getString(fullItemKey, ITEM_NOT_FOUND); //Blank default values are the error case as you cannot have an item with no length
 
                 //Restore items that were found in the restored shared preference
                 if (restoredItem != ITEM_NOT_FOUND) {
@@ -143,8 +138,8 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
 
                         //Update the value in the shared preferences file
                         String fullItemKey = baseItemKey + (itemList.size() - 1); //get the key of the changed item
-                        preferencesEditor.putString(fullItemKey, userItemName);
-                        preferencesEditor.apply();
+                        itemListSharedPrefsEditor.putString(fullItemKey, userItemName);
+                        itemListSharedPrefsEditor.apply();
                     }
 
                     else {

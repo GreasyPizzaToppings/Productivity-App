@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-sq\\values-sq.xml",
+            "outputFile": "E:\\ProductivityAppPrototype\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-sq\\values-sq.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\values-sq\\values-sq.xml",
+                    "source": "C:\\Users\\15397\\.gradle\\caches\\transforms-2\\files-2.1\\b69526687a26986fb6eb40dcc0350615\\res\\values-sq\\values-sq.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -14,7 +14,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\d6cbc209d1d4927649289b2c6e0d6ab4\\res\\values-sq\\values-sq.xml",
+                    "source": "C:\\Users\\15397\\.gradle\\caches\\transforms-2\\files-2.1\\1425539e313553bb1381a5d79b77b30b\\res\\values-sq\\values-sq.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
