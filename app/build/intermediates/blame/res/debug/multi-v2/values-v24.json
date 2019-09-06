@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "E:\\ProductivityAppPrototype\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v24\\values-v24.xml",
+            "outputFile": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v24\\values-v24.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\15397\\.gradle\\caches\\transforms-2\\files-2.1\\089c7175574ba8398dcd81bbdd860071\\res\\values-v24\\values-v24.xml",
+                    "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\e0140becc58a71053dde82013d41b193\\res\\values-v24\\values-v24.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\15397\\.gradle\\caches\\transforms-2\\files-2.1\\b69526687a26986fb6eb40dcc0350615\\res\\values-v24\\values-v24.xml",
+                    "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\values-v24\\values-v24.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",

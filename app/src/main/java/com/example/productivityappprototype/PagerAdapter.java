@@ -20,8 +20,6 @@ public class PagerAdapter extends FragmentStatePagerAdapter{
                 return new ScheduleFragment();
             case(1):
                 return new ItemListFragment();
-            case(2):
-                return new StatisticsFragment();
             default:
                 return null;
         }

@@ -46,9 +46,9 @@ public class ScheduleDialogItemListAdapter extends RecyclerView.Adapter<Schedule
         //The onclick event for each item view holder in the recycler view
         @Override
         public void onClick(View v) {
-            //Reset each of the items to their default white colour.
+            //Reset each of the items to their default colour
             for(TextView itemHolder : itemViewHolderList) {
-                itemHolder.setBackgroundColor(Color.WHITE);
+                itemHolder.setBackgroundColor(Color.TRANSPARENT);
             }
 
             //Only show that an item is selected if it was different to the item that was selected before
@@ -67,7 +67,6 @@ public class ScheduleDialogItemListAdapter extends RecyclerView.Adapter<Schedule
             }
         }
     }
-
 
     @NonNull
     @Override

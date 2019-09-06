@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
         //Create the tabs
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_label_schedule));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_label_item_list));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_label_statistics));
 
         //Make the tabs fill the whole layout
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -66,10 +65,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
+        if (id == R.id.action_settings) return true;
         return super.onOptionsItemSelected(item);
     }
 }

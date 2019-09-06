@@ -4,13 +4,18 @@ import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.style.StrikethroughSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -21,11 +26,11 @@ import java.util.LinkedList;
 
 public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemListAdapter.ItemViewHolder> {
     private LayoutInflater mInflater;
-
     private LinkedList<String> rawScheduledItems; //The list of raw item names (Not including times) that the user has scheduled through the scheduling dialog. Some items may not appear in the item list.
     private final LinkedList<String> formattedScheduledItemsWithTimes; //The list of formatted items, including the times which the user has or has not selected.
     private LinkedList<String> scheduledItemsStartTimes; //Holds the associated start time for each scheduled item. If the user didn't specify a start time, then the value is "n/a"
     private LinkedList<String> scheduledItemsEndTimes; //Holds the associated end time for each scheduled item. If the user didn't specify a start time, then the value is "n/a"
+    private LinkedList<String> scheduledItemsCompletionStatus;
     private UpdateScheduledItemInterface adapterInterface;
 
     public interface UpdateScheduledItemInterface {
@@ -33,15 +38,17 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
         void OnUpdateEndTime(String updatedEndTime, int scheduledItemIndex);
         void OnUpdateItemName(String newItemName, int scheduledItemIndex);
         void OnUnscheduleItem(String itemToUnschedule, int scheduledItemIndex);
+        void OnUpdateItemStatus(String complete, int scheduledItemIndex); //When the user changes the state of the "Mark As Complete" checkbox
     }
 
     //Constructor for the class, for the context of the schedule fragment.
-    public ScheduleItemListAdapter(ScheduleFragment context, LinkedList<String> rawScheduledItems, LinkedList<String> formattedScheduledItemsWithTimes, LinkedList<String> scheduledItemsStartTimes, LinkedList<String> scheduledItemsEndTimes, UpdateScheduledItemInterface adapterInterface) {
+    public ScheduleItemListAdapter(ScheduleFragment context, LinkedList<String> rawScheduledItems, LinkedList<String> formattedScheduledItemsWithTimes, LinkedList<String> scheduledItemsStartTimes, LinkedList<String> scheduledItemsEndTimes,LinkedList<String> scheduledItemsCompletionStatus , UpdateScheduledItemInterface adapterInterface) {
         mInflater = LayoutInflater.from(context.getActivity()); //Initialise the inflater used to inflate the layout the view holder for each item
         this.rawScheduledItems = rawScheduledItems;
         this.formattedScheduledItemsWithTimes = formattedScheduledItemsWithTimes;
         this.scheduledItemsStartTimes = scheduledItemsStartTimes;
         this.scheduledItemsEndTimes = scheduledItemsEndTimes;
+        this.scheduledItemsCompletionStatus = scheduledItemsCompletionStatus;
         this.adapterInterface = adapterInterface;
     }
 
@@ -55,6 +62,8 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
         private Time startTime, endTime;
         private final int MAX_ITEM_LENGTH = 100;
         private final int MIN_ITEM_LENGTH = 1;
+        private final String baseItemKey = "item:"; //The base key used to store the items in the bundle
+        private final String ITEM_NOT_FOUND = "";
 
         //Initialises the view holder text view from the word xml resource and sets its adapter
         public ItemViewHolder(View itemView, ScheduleItemListAdapter adapter) {
@@ -87,6 +96,14 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
             TextView endTimeTextView = dialogView.findViewById(R.id.text_update_end_time_selected);
             endTimeTextView.setText(scheduledItemsEndTimes.get(scheduledItemIndex));
 
+            //Get a handle on the checkbox for marking an item as done
+            final CheckBox markAsCompleted = dialogView.findViewById(R.id.checkBox_mark_as_completed);
+
+            //Read from the shared prefs file to see if the box should be checked
+            final SharedPreferences scheduledItemsCompletionStatusSharedPrefs = v.getRootView().getContext().getSharedPreferences("com.example.productivityappprototype.completion", Context.MODE_PRIVATE);
+            final String fullItemKey = baseItemKey + scheduledItemIndex;
+            if(scheduledItemsCompletionStatusSharedPrefs.getString(fullItemKey, ITEM_NOT_FOUND).equals("true")) markAsCompleted.setChecked(true);
+
             builder.setNeutralButton("Unschedule Item", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -105,11 +122,21 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
             builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    //---See if the user has changed the item's completion status---
+                    if(!Boolean.toString(markAsCompleted.isChecked()).equals(scheduledItemsCompletionStatusSharedPrefs.getString(fullItemKey, ITEM_NOT_FOUND))) {
+                        //Strike through the text for items marked as complete, and de-strike items if necessary
+                        if(markAsCompleted.isChecked()) item.setPaintFlags(item.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        else item.setPaintFlags(item.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+
+                        //Update the data with the new status
+                        adapterInterface.OnUpdateItemStatus(Boolean.toString(markAsCompleted.isChecked()), scheduledItemIndex);
+                    }
+
                     String oldItemName = rawScheduledItems.get(scheduledItemIndex);
                     String newItemName = scheduledItemEditText.getText().toString();
 
                     //If the user changes the name of the scheduled item.
-                    if(oldItemName != newItemName){
+                    if(!oldItemName.equals(newItemName)){
                         //If the new name is legitimate
                         if(newItemName.length() >= MIN_ITEM_LENGTH && newItemName.length() <= MAX_ITEM_LENGTH) {
                             rawScheduledItems.set(scheduledItemIndex, newItemName); //Update the local linked list with the new name
@@ -156,13 +183,19 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
                             int currentMinute = currentTime.get(Calendar.MINUTE);
                             long currentTimeInMs = (currentHour * 60 * 60 * 1000) + (currentMinute * 60 * 1000);
 
-                            TextView startTimeSelected = dialogView.findViewById(R.id.text_update_start_time_selected);
+                            //Get the end time in ms to see if this time configuration is legitimate
+                            if(!scheduledItemsEndTimes.get(scheduledItemIndex).equals("n/a")) {
+                                int endHour = Integer.parseInt(scheduledItemsEndTimes.get(scheduledItemIndex).substring(0,2)); //get the hours
+                                int endMinute = Integer.parseInt(scheduledItemsEndTimes.get(scheduledItemIndex).substring(3,5)); //get the minutes
+                                endTimeInMs = (endHour*60*60*1000) + (endMinute*60*1000);
+                            }
 
                             //If the specified time is possible
                             if(ScheduledTimeLegitimate(startTimeInMs, endTimeInMs, currentTimeInMs, v.getContext())) {
                                 //Convert the selected time to a readable format
                                 startTime = new Time(startTimeInMs - midDayInMs); //Set the correct time, adjusting for a default value of mid day.
                                 //Update the start time text view
+                                TextView startTimeSelected = dialogView.findViewById(R.id.text_update_start_time_selected);
                                 startTimeSelected.setText(startTime.toString()); //Show the user what time they selected
 
                                 //Notify the fragment of the change
@@ -190,6 +223,8 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
                 public void onClick(View buttonView) {
                     //Get the current time when the user pressed the button that opens the picker
                     int buttonEndHour = currentTime.get(Calendar.HOUR_OF_DAY);
+                    if(buttonEndHour <= 23) buttonEndHour++; //Set the default end time to be an hour in advance, which is a practical time.
+
                     int buttonEndMinute = currentTime.get(Calendar.MINUTE);
 
                     //Update the default time picker values if they the user has chosen a time before
@@ -210,13 +245,20 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
                             int currentMinute = currentTime.get(Calendar.MINUTE);
                             long currentTimeInMs = (currentHour * 60 * 60 * 1000) + (currentMinute * 60 * 1000);
 
-                            TextView endTimeSelected = dialogView.findViewById(R.id.text_update_end_time_selected);
+                            //Get the start time in ms to see if this time configuration is legitimate
+                            if(!scheduledItemsStartTimes.get(scheduledItemIndex).equals("n/a")) {
+                                int startHour = Integer.parseInt(scheduledItemsStartTimes.get(scheduledItemIndex).substring(0,2)); //get the hours
+                                int startMinute = Integer.parseInt(scheduledItemsStartTimes.get(scheduledItemIndex).substring(3,5)); //get the minutes
+                                startTimeInMs = (startHour*60*60*1000) + (startMinute*60*1000);
+                            }
 
                             //If the specified time is possible
                             if(ScheduledTimeLegitimate(startTimeInMs, endTimeInMs, currentTimeInMs, v.getContext())) {
                                 //Convert the selected time to a readable format
                                 endTime = new Time(endTimeInMs - midDayInMs); //Set the correct time, adjusting for a default value of mid day.
+
                                 //Update the start time text view
+                                TextView endTimeSelected = dialogView.findViewById(R.id.text_update_end_time_selected);
                                 endTimeSelected.setText(endTime.toString()); //Show the user what time they selected
 
                                 //Notify the fragment of the change
@@ -231,7 +273,6 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
                     timePickerDialog.show();
                 }
             });
-
             builder.setView(dialogView); //Set the custom layout for the dialog
             builder.create().show();
         }
@@ -275,7 +316,6 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
                     return false;
                 }
             }
-
             return true; //If this point is reached, the time is presumed to be legitimate
         }
     }
@@ -290,6 +330,9 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
     @Override
     public void onBindViewHolder(@NonNull ScheduleItemListAdapter.ItemViewHolder itemViewHolder, int position) {
         String currentScheduledItem = formattedScheduledItemsWithTimes.get(position);
+        //Make the text strike through if it needs to be
+        if(scheduledItemsCompletionStatus.get(position).equals("true")) itemViewHolder.item.setPaintFlags(itemViewHolder.item.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        else itemViewHolder.item.setPaintFlags(itemViewHolder.item.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)); //Turn off strike through if necessary
         itemViewHolder.item.setText(currentScheduledItem);
     }
 
