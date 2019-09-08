@@ -1,9 +1,5 @@
 #Internal package file, do not edit.
-<<<<<<< HEAD
-#Fri Sep 06 17:34:50 NZST 2019
-=======
-#Thu Aug 29 19:13:59 NZST 2019
->>>>>>> 8a35b0eacdcc1b1c91c05f787282d9738f19100b
+#Fri Sep 06 18:16:27 NZST 2019
 0.baseType=DIRECTORY
 0.base=C\:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\dex\\debug\\mergeDexDebug\\out
 0.path=classes.dex

@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-24:12
-INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-24:12
-INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-24:12
-INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-24:12
+ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-23:12
+INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-23:12
+INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-23:12
+INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-23:12
 MERGED from [com.android.support:design:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\5c31ca3911fa850e701dca344c35c2e4\AndroidManifest.xml:17:1-24:12
 MERGED from [com.android.support:appcompat-v7:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\338d2b03908fe6decb27ca3b9741164f\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support.constraint:constraint-layout:1.1.3] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\3d273a6219f84f9a960db8fd601eb795\AndroidManifest.xml:2:1-11:12
@@ -37,25 +37,25 @@ MERGED from [com.android.support:interpolator:28.0.0] C:\Users\Baxter\.gradle\ca
 MERGED from [android.arch.lifecycle:livedata:1.1.1] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\2fbfdda49c506809559b9101eb498f02\AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.lifecycle:livedata-core:1.1.1] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\5d9f3386f6c73765bccb59a10ddfc8b3\AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.core:runtime:1.1.1] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\3b9afb4646a1e6fa211c103cf21f7f92\AndroidManifest.xml:17:1-22:12
-INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-24:12
-INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-24:12
-INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-24:12
+INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-23:12
+INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-23:12
+INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-23:12
 	package
 		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:3:5-51
 		INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
 		INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
 	android:versionName
 		INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-24:12
+		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-23:12
 		INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
 	android:versionCode
 		INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-24:12
+		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:1-23:12
 		INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml
 	xmlns:android
 		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:2:11-69
 application
-ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:5:5-22:19
+ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:5:5-21:19
 MERGED from [com.android.support:design:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\5c31ca3911fa850e701dca344c35c2e4\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:design:28.0.0] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\5c31ca3911fa850e701dca344c35c2e4\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support.constraint:constraint-layout:1.1.3] C:\Users\Baxter\.gradle\caches\transforms-2\files-2.1\3d273a6219f84f9a960db8fd601eb795\AndroidManifest.xml:9:5-20
@@ -79,7 +79,7 @@ MERGED from [com.android.support:versionedparcelable:28.0.0] C:\Users\Baxter\.gr
 	android:theme
 		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:11:9-40
 activity#com.example.productivityappprototype.MainActivity
-ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:12:9-21:20
+ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:12:9-20:20
 	android:label
 		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:14:13-45
 	android:theme
@@ -87,15 +87,15 @@ ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototy
 	android:name
 		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:13:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:16:13-20:29
+ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:16:13-19:29
 action#android.intent.action.MAIN
 ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:17:17-69
 	android:name
 		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:17:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:19:17-77
+ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:18:17-77
 	android:name
-		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:19:27-74
+		ADDED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml:18:27-74
 uses-sdk
 INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\Baxter\Documents\Android_Applications\ProductivityAppPrototype\app\src\main\AndroidManifest.xml

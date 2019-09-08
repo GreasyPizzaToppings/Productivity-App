@@ -628,6 +628,7 @@ color dim_foreground_material_dark
 color dim_foreground_material_light
 color error_color_material_dark
 color error_color_material_light
+color fb_unschedule_all_background
 color foreground_material_dark
 color foreground_material_light
 color highlighted_text_material_dark
@@ -1008,6 +1009,7 @@ drawable design_ic_visibility
 drawable design_ic_visibility_off
 drawable design_password_eye
 drawable design_snackbar_background
+drawable fb_unschedule_all_trash_can
 drawable ic_launcher_background
 drawable ic_launcher_foreground
 drawable ic_mtrl_chip_checked_black
@@ -1101,8 +1103,8 @@ id design_navigation_view
 id dimensions
 id direct
 id disableHome
+id edit_one_time_item
 id edit_query
-id edit_scheduled_item_name
 id end
 id end_padder
 id enterAlways
@@ -1112,6 +1114,7 @@ id expand_activities_button
 id expanded_menu
 id fb_add_item
 id fb_schedule_item
+id fb_unschedule_all
 id fill
 id fill_horizontal
 id fill_vertical
@@ -1232,12 +1235,12 @@ id text_edit_scheduled_item_name
 id text_edit_time_heading
 id text_end_time
 id text_input_password_toggle
-id text_item
-id text_message
+id text_item_header
+id text_items_header
 id text_no_items
 id text_select_one_time_item
 id text_start_time
-id text_time
+id text_time_header
 id text_update_end_time_selected
 id text_update_start_time_selected
 id text_width_measuring
@@ -1354,9 +1357,10 @@ layout schedule_new_item_dialog
 layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
-layout statistics_fragment
 layout support_simple_spinner_dropdown_item
 menu menu_main
+mipmap fb_unschedule_all
+mipmap fb_unschedule_all_round
 mipmap ic_launcher
 mipmap ic_launcher_round
 string abc_action_bar_home_description
@@ -1410,7 +1414,6 @@ string define_item_time
 string dialog_cancel
 string dialog_delete
 string dialog_done
-string dialog_schedule_message
 string end_time
 string existing_item
 string fab_transformation_scrim_behavior

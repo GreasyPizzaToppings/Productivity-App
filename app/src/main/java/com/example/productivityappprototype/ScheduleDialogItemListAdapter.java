@@ -16,6 +16,8 @@ public class ScheduleDialogItemListAdapter extends RecyclerView.Adapter<Schedule
     private LinkedList<TextView> itemViewHolderList; //The list of the text view elements which are the item view holder
     private AddScheduledItemInterface adapterInterface;
     private TextView previouslySelectedItem;
+    private final String lightGrayBackgroundHex = "#d9d9d9"; //85% white according to w3 schools
+    private final String darkGrayBackgroundHex = "#bfbfbf"; //75% white according to w3 schools
 
     //This interface tells the ScheduleFragment what item was selected, to enable the functionality of the schedule new item dialog.
     public interface AddScheduledItemInterface {
@@ -47,8 +49,9 @@ public class ScheduleDialogItemListAdapter extends RecyclerView.Adapter<Schedule
         @Override
         public void onClick(View v) {
             //Reset each of the items to their default colour
-            for(TextView itemHolder : itemViewHolderList) {
-                itemHolder.setBackgroundColor(Color.TRANSPARENT);
+            for(int itemIndex = 0; itemIndex < itemViewHolderList.size(); itemIndex++) { //for(TextView itemHolder : itemViewHolderList) {
+                if((itemIndex % 2) == 1) itemViewHolderList.get(itemIndex).setBackgroundColor(Color.parseColor(darkGrayBackgroundHex));
+                else itemViewHolderList.get(itemIndex).setBackgroundColor(Color.parseColor(lightGrayBackgroundHex));
             }
 
             //Only show that an item is selected if it was different to the item that was selected before
@@ -79,6 +82,10 @@ public class ScheduleDialogItemListAdapter extends RecyclerView.Adapter<Schedule
     public void onBindViewHolder(@NonNull ScheduleDialogItemListAdapter.ItemViewHolder itemViewHolder, int position) {
         String currentItem = itemList.get(position);
         itemViewHolder.item.setText(currentItem);
+
+        //---Give the items an alternating coloured background---
+        if((position % 2) == 1)itemViewHolder.item.setBackgroundColor(Color.parseColor(darkGrayBackgroundHex));
+        else itemViewHolder.item.setBackgroundColor(Color.parseColor(lightGrayBackgroundHex));
     }
 
     @Override

@@ -5,12 +5,10 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableString;
-import android.text.style.StrikethroughSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,18 +30,20 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
     private LinkedList<String> scheduledItemsEndTimes; //Holds the associated end time for each scheduled item. If the user didn't specify a start time, then the value is "n/a"
     private LinkedList<String> scheduledItemsCompletionStatus;
     private UpdateScheduledItemInterface adapterInterface;
+    private final String lightGrayBackgroundHex = "#d9d9d9"; //85% white according to w3 schools
+    private final String darkGrayBackgroundHex = "#bfbfbf"; //75% white according to w3 schools
 
     public interface UpdateScheduledItemInterface {
         void OnUpdateStartTime(String updatedStartTime, int scheduledItemIndex);
         void OnUpdateEndTime(String updatedEndTime, int scheduledItemIndex);
         void OnUpdateItemName(String newItemName, int scheduledItemIndex);
-        void OnUnscheduleItem(String itemToUnschedule, int scheduledItemIndex);
+        void OnUnscheduleItem(int scheduledItemIndex);
         void OnUpdateItemStatus(String complete, int scheduledItemIndex); //When the user changes the state of the "Mark As Complete" checkbox
     }
 
     //Constructor for the class, for the context of the schedule fragment.
-    public ScheduleItemListAdapter(ScheduleFragment context, LinkedList<String> rawScheduledItems, LinkedList<String> formattedScheduledItemsWithTimes, LinkedList<String> scheduledItemsStartTimes, LinkedList<String> scheduledItemsEndTimes,LinkedList<String> scheduledItemsCompletionStatus , UpdateScheduledItemInterface adapterInterface) {
-        mInflater = LayoutInflater.from(context.getActivity()); //Initialise the inflater used to inflate the layout the view holder for each item
+    public ScheduleItemListAdapter(ScheduleFragment scheduleFragment, LinkedList<String> rawScheduledItems, LinkedList<String> formattedScheduledItemsWithTimes, LinkedList<String> scheduledItemsStartTimes, LinkedList<String> scheduledItemsEndTimes,LinkedList<String> scheduledItemsCompletionStatus , UpdateScheduledItemInterface adapterInterface) {
+        mInflater = LayoutInflater.from(scheduleFragment.getActivity()); //Initialise the inflater used to inflate the layout the view holder for each item
         this.rawScheduledItems = rawScheduledItems;
         this.formattedScheduledItemsWithTimes = formattedScheduledItemsWithTimes;
         this.scheduledItemsStartTimes = scheduledItemsStartTimes;
@@ -84,7 +84,7 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
             final View dialogView = inflater.inflate(R.layout.schedule_edit_item_dialog, null);
 
             //Set the edit text to the name of the item
-            final EditText scheduledItemEditText = dialogView.findViewById(R.id.edit_scheduled_item_name);
+            final EditText scheduledItemEditText = dialogView.findViewById(R.id.edit_one_time_item);
             final int scheduledItemIndex = getLayoutPosition(); //Get the index of the clicked scheduled item
             scheduledItemEditText.setText(rawScheduledItems.get(scheduledItemIndex));
 
@@ -104,11 +104,11 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
             final String fullItemKey = baseItemKey + scheduledItemIndex;
             if(scheduledItemsCompletionStatusSharedPrefs.getString(fullItemKey, ITEM_NOT_FOUND).equals("true")) markAsCompleted.setChecked(true);
 
-            builder.setNeutralButton("Unschedule Item", new DialogInterface.OnClickListener() {
+            builder.setNeutralButton("Unschedule", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //Remove the scheduled item from the recyclerview and the scheduled items lists
-                    adapterInterface.OnUnscheduleItem(rawScheduledItems.get(scheduledItemIndex), scheduledItemIndex);
+                    adapterInterface.OnUnscheduleItem(scheduledItemIndex);
                 }
             });
 
@@ -328,12 +328,15 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ScheduleItemListAdapter.ItemViewHolder itemViewHolder, int position) {
-        String currentScheduledItem = formattedScheduledItemsWithTimes.get(position);
+    public void onBindViewHolder(@NonNull ItemViewHolder itemViewHolder, int position) {
         //Make the text strike through if it needs to be
         if(scheduledItemsCompletionStatus.get(position).equals("true")) itemViewHolder.item.setPaintFlags(itemViewHolder.item.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         else itemViewHolder.item.setPaintFlags(itemViewHolder.item.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)); //Turn off strike through if necessary
-        itemViewHolder.item.setText(currentScheduledItem);
+        itemViewHolder.item.setText(formattedScheduledItemsWithTimes.get(position));
+
+        //---Give the items an alternating coloured background---
+        if((position % 2) == 1)itemViewHolder.item.setBackgroundColor(Color.parseColor(darkGrayBackgroundHex));
+        else itemViewHolder.item.setBackgroundColor(Color.parseColor(lightGrayBackgroundHex));
     }
 
     @Override

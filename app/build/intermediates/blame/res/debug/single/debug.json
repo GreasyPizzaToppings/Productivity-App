@@ -120,6 +120,10 @@
         "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\generated\\res\\pngs\\debug\\drawable-xhdpi\\ic_launcher_foreground.png"
     },
     {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi_fb_unschedule_all_trash_can.png.flat",
+        "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\generated\\res\\pngs\\debug\\drawable-xxxhdpi\\fb_unschedule_all_trash_can.png"
+    },
+    {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\layout_design_layout_tab_icon.xml.flat",
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\5c31ca3911fa850e701dca344c35c2e4\\res\\layout\\design_layout_tab_icon.xml"
     },
@@ -204,6 +208,10 @@
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-xxhdpi-v4\\abc_textfield_default_mtrl_alpha.9.png"
     },
     {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_fb_unschedule_all_trash_can.png.flat",
+        "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\generated\\res\\pngs\\debug\\drawable-mdpi\\fb_unschedule_all_trash_can.png"
+    },
+    {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable_abc_item_background_holo_dark.xml.flat",
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable\\abc_item_background_holo_dark.xml"
     },
@@ -216,12 +224,16 @@
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-mdpi-v4\\abc_textfield_search_default_mtrl_alpha.9.png"
     },
     {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\color_abc_tint_seek_thumb.xml.flat",
+        "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\color\\abc_tint_seek_thumb.xml"
+    },
+    {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_abc_scrubber_track_mtrl_alpha.9.png.flat",
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-xxhdpi-v4\\abc_scrubber_track_mtrl_alpha.9.png"
     },
     {
-        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\color_abc_tint_seek_thumb.xml.flat",
-        "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\color\\abc_tint_seek_thumb.xml"
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_fb_unschedule_all_round.png.flat",
+        "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\src\\main\\res\\mipmap-xxxhdpi\\fb_unschedule_all_round.png"
     },
     {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable_notification_bg.xml.flat",
@@ -436,16 +448,24 @@
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable\\tooltip_frame_light.xml"
     },
     {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_fb_unschedule_all_round.png.flat",
+        "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\src\\main\\res\\mipmap-hdpi\\fb_unschedule_all_round.png"
+    },
+    {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21_notification_action.xml.flat",
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\d6cbc209d1d4927649289b2c6e0d6ab4\\res\\layout-v21\\notification_action.xml"
     },
     {
-        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_ic_menu_cut_mtrl_alpha.png.flat",
-        "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-hdpi-v4\\abc_ic_menu_cut_mtrl_alpha.png"
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_fb_unschedule_all.xml.flat",
+        "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\src\\main\\res\\mipmap-anydpi-v26\\fb_unschedule_all.xml"
     },
     {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_scrubber_primary_mtrl_alpha.9.png.flat",
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-hdpi-v4\\abc_scrubber_primary_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_ic_menu_cut_mtrl_alpha.png.flat",
+        "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-hdpi-v4\\abc_ic_menu_cut_mtrl_alpha.png"
     },
     {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_abc_ab_share_pack_mtrl_alpha.9.png.flat",
@@ -456,28 +476,28 @@
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-xxxhdpi-v4\\abc_tab_indicator_mtrl_alpha.9.png"
     },
     {
-        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldrtl-hdpi-v17_abc_ic_menu_cut_mtrl_alpha.png.flat",
-        "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-ldrtl-hdpi-v17\\abc_ic_menu_cut_mtrl_alpha.png"
-    },
-    {
-        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\layout-v16_notification_template_custom_big.xml.flat",
-        "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\d6cbc209d1d4927649289b2c6e0d6ab4\\res\\layout-v16\\notification_template_custom_big.xml"
-    },
-    {
-        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable_abc_btn_check_material.xml.flat",
-        "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable\\abc_btn_check_material.xml"
-    },
-    {
-        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\anim_abc_shrink_fade_out_from_bottom.xml.flat",
-        "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\anim\\abc_shrink_fade_out_from_bottom.xml"
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable_abc_ratingbar_material.xml.flat",
+        "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable\\abc_ratingbar_material.xml"
     },
     {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_abc_list_selector_disabled_holo_dark.9.png.flat",
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-xxhdpi-v4\\abc_list_selector_disabled_holo_dark.9.png"
     },
     {
-        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable_abc_ratingbar_material.xml.flat",
-        "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable\\abc_ratingbar_material.xml"
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\anim_abc_shrink_fade_out_from_bottom.xml.flat",
+        "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\anim\\abc_shrink_fade_out_from_bottom.xml"
+    },
+    {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable_abc_btn_check_material.xml.flat",
+        "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable\\abc_btn_check_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\layout-v16_notification_template_custom_big.xml.flat",
+        "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\d6cbc209d1d4927649289b2c6e0d6ab4\\res\\layout-v16\\notification_template_custom_big.xml"
+    },
+    {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldrtl-hdpi-v17_abc_ic_menu_cut_mtrl_alpha.png.flat",
+        "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-ldrtl-hdpi-v17\\abc_ic_menu_cut_mtrl_alpha.png"
     },
     {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldrtl-xxxhdpi-v17_abc_ic_menu_copy_mtrl_am_alpha.png.flat",
@@ -540,12 +560,20 @@
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\anim\\abc_popup_enter.xml"
     },
     {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_fb_unschedule_all.png.flat",
+        "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\src\\main\\res\\mipmap-hdpi\\fb_unschedule_all.png"
+    },
+    {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\menu_menu_main.xml.flat",
         "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\src\\main\\res\\menu\\menu_main.xml"
     },
     {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_abc_text_select_handle_right_mtrl_light.png.flat",
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-xxhdpi-v4\\abc_text_select_handle_right_mtrl_light.png"
+    },
+    {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_fb_unschedule_all_round.png.flat",
+        "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\src\\main\\res\\mipmap-mdpi\\fb_unschedule_all_round.png"
     },
     {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\color_abc_background_cache_hint_selector_material_light.xml.flat",
@@ -840,6 +868,10 @@
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-hdpi-v4\\abc_text_select_handle_right_mtrl_light.png"
     },
     {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_fb_unschedule_all_round.png.flat",
+        "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\src\\main\\res\\mipmap-xhdpi\\fb_unschedule_all_round.png"
+    },
+    {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_scrubber_control_off_mtrl_alpha.png.flat",
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-hdpi-v4\\abc_scrubber_control_off_mtrl_alpha.png"
     },
@@ -940,6 +972,10 @@
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-v21\\abc_action_bar_item_background_material.xml"
     },
     {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi_fb_unschedule_all_trash_can.png.flat",
+        "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\generated\\res\\pngs\\debug\\drawable-xhdpi\\fb_unschedule_all_trash_can.png"
+    },
+    {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_abc_btn_radio_to_on_mtrl_000.png.flat",
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-xxhdpi-v4\\abc_btn_radio_to_on_mtrl_000.png"
     },
@@ -996,6 +1032,10 @@
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-mdpi-v4\\abc_scrubber_control_to_pressed_mtrl_005.png"
     },
     {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi_fb_unschedule_all_trash_can.png.flat",
+        "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\generated\\res\\pngs\\debug\\drawable-ldpi\\fb_unschedule_all_trash_can.png"
+    },
+    {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\animator_design_fab_hide_motion_spec.xml.flat",
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\5c31ca3911fa850e701dca344c35c2e4\\res\\animator\\design_fab_hide_motion_spec.xml"
     },
@@ -1006,6 +1046,10 @@
     {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\color_abc_hint_foreground_material_light.xml.flat",
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\color\\abc_hint_foreground_material_light.xml"
+    },
+    {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_fb_unschedule_all_round.xml.flat",
+        "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\src\\main\\res\\mipmap-anydpi-v26\\fb_unschedule_all_round.xml"
     },
     {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable_navigation_empty_icon.xml.flat",
@@ -1070,10 +1114,6 @@
     {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_abc_btn_radio_to_on_mtrl_000.png.flat",
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-xhdpi-v4\\abc_btn_radio_to_on_mtrl_000.png"
-    },
-    {
-        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\layout_statistics_fragment.xml.flat",
-        "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\src\\main\\res\\layout\\statistics_fragment.xml"
     },
     {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_abc_ic_star_black_48dp.png.flat",
@@ -1280,6 +1320,10 @@
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\d6cbc209d1d4927649289b2c6e0d6ab4\\res\\drawable-mdpi-v4\\notification_bg_normal.9.png"
     },
     {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_fb_unschedule_all.png.flat",
+        "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\src\\main\\res\\mipmap-xxxhdpi\\fb_unschedule_all.png"
+    },
+    {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_abc_textfield_search_activated_mtrl_alpha.9.png.flat",
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-mdpi-v4\\abc_textfield_search_activated_mtrl_alpha.9.png"
     },
@@ -1356,6 +1400,10 @@
         "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\src\\main\\res\\drawable\\plus_icon_blue.png"
     },
     {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi_fb_unschedule_all_trash_can.png.flat",
+        "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\generated\\res\\pngs\\debug\\drawable-xxhdpi\\fb_unschedule_all_trash_can.png"
+    },
+    {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable_design_password_eye.xml.flat",
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\5c31ca3911fa850e701dca344c35c2e4\\res\\drawable\\design_password_eye.xml"
     },
@@ -1378,6 +1426,10 @@
     {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_abc_ic_star_half_black_48dp.png.flat",
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-xxhdpi-v4\\abc_ic_star_half_black_48dp.png"
+    },
+    {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_fb_unschedule_all.png.flat",
+        "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\src\\main\\res\\mipmap-mdpi\\fb_unschedule_all.png"
     },
     {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable_abc_ratingbar_small_material.xml.flat",
@@ -1518,6 +1570,10 @@
     {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi-v4_abc_ic_star_half_black_36dp.png.flat",
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-xxxhdpi-v4\\abc_ic_star_half_black_36dp.png"
+    },
+    {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_fb_unschedule_all_round.png.flat",
+        "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\src\\main\\res\\mipmap-xxhdpi\\fb_unschedule_all_round.png"
     },
     {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable_mtrl_tabs_default_indicator.xml.flat",
@@ -1772,6 +1828,10 @@
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\layout\\abc_screen_simple.xml"
     },
     {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_fb_unschedule_all.png.flat",
+        "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\src\\main\\res\\mipmap-xhdpi\\fb_unschedule_all.png"
+    },
+    {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_abc_list_longpressed_holo.9.png.flat",
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-xxhdpi-v4\\abc_list_longpressed_holo.9.png"
     },
@@ -1854,6 +1914,10 @@
     {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_design_ic_visibility.png.flat",
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\5c31ca3911fa850e701dca344c35c2e4\\res\\drawable-hdpi-v4\\design_ic_visibility.png"
+    },
+    {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi_fb_unschedule_all_trash_can.png.flat",
+        "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\generated\\res\\pngs\\debug\\drawable-hdpi\\fb_unschedule_all_trash_can.png"
     },
     {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\color-v23_abc_tint_seek_thumb.xml.flat",
@@ -1968,6 +2032,10 @@
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\drawable-xxxhdpi-v4\\abc_ic_menu_selectall_mtrl_alpha.png"
     },
     {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_fb_unschedule_all.png.flat",
+        "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\src\\main\\res\\mipmap-xxhdpi\\fb_unschedule_all.png"
+    },
+    {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\layout_abc_screen_content_include.xml.flat",
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\338d2b03908fe6decb27ca3b9741164f\\res\\layout\\abc_screen_content_include.xml"
     },
@@ -2034,6 +2102,10 @@
     {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\animator_mtrl_btn_state_list_anim.xml.flat",
         "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\5c31ca3911fa850e701dca344c35c2e4\\res\\animator\\mtrl_btn_state_list_anim.xml"
+    },
+    {
+        "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21_fb_unschedule_all_trash_can.xml.flat",
+        "source": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\generated\\res\\pngs\\debug\\drawable-anydpi-v21\\fb_unschedule_all_trash_can.xml"
     },
     {
         "merged": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityAppPrototype\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_notification_bg_low_normal.9.png.flat",

@@ -6,28 +6,12 @@
 
 
     <TextView
-        android:id="@+id/text_message"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="@string/dialog_schedule_message"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <TextView
         android:id="@+id/text_edit_item_heading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/select_item"
@@ -36,7 +20,7 @@
         android:typeface="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_message" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/text_edit_scheduled_item_name"
@@ -73,13 +57,13 @@
         android:text="OR Use A One-Time Item"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/edit_scheduled_item_name"
-        app:layout_constraintStart_toStartOf="@+id/edit_scheduled_item_name"
+        app:layout_constraintEnd_toEndOf="@+id/edit_one_time_item"
+        app:layout_constraintStart_toStartOf="@+id/edit_one_time_item"
         app:layout_constraintTop_toBottomOf="@+id/recyclerview_schedule_dialog" />
 
 
     <EditText
-        android:id="@+id/edit_scheduled_item_name"
+        android:id="@+id/edit_one_time_item"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -113,7 +97,7 @@
         android:typeface="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edit_scheduled_item_name" />
+        app:layout_constraintTop_toBottomOf="@id/edit_one_time_item" />
 
     <TextView
         android:id="@+id/text_start_time"
@@ -133,8 +117,8 @@
         android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:text="@string/choose"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -161,8 +145,8 @@
         android:id="@+id/button_end_time"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:text="@string/choose"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"

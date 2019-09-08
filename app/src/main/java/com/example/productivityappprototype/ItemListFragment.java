@@ -9,6 +9,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,9 +54,17 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
         FloatingActionButton addItemButton = v.findViewById(R.id.fb_add_item);
         addItemButton.setOnClickListener(this);
 
+        //Underline the header text "Items"
+        String itemsHeader = "Items";
+        SpannableString itemHeaderSpannable = new SpannableString(itemsHeader);
+        itemHeaderSpannable.setSpan(new UnderlineSpan(), 0, itemsHeader.length(), 0); //Make the text underlined
+
+        //Display the underlined header
+        TextView itemsHeaderTextView = v.findViewById(R.id.text_items_header);
+        itemsHeaderTextView.setText(itemHeaderSpannable);
+
         //Initialise the SharedPreferences object
         itemListSharedPrefs = getActivity().getSharedPreferences(itemListSharedPrefsFile, MODE_PRIVATE);
-        itemListSharedPrefsEditor = itemListSharedPrefs.edit(); //Initialise the editor
 
         //Restore the data from the SharedPreferences file
         if(!itemListSharedPrefsFile.isEmpty()) {
@@ -64,14 +74,10 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
                 String restoredItem = itemListSharedPrefs.getString(fullItemKey, ITEM_NOT_FOUND); //Blank default values are the error case as you cannot have an item with no length
 
                 //Restore items that were found in the restored shared preference
-                if (restoredItem != ITEM_NOT_FOUND) {
-                    itemList.addLast(restoredItem);
-                }
+                if (restoredItem != ITEM_NOT_FOUND) itemList.addLast(restoredItem);
             }
 
-            if (adapter != null) {
-                adapter.notifyDataSetChanged(); //Refresh if the adapter exists
-            }
+            if (adapter != null) adapter.notifyDataSetChanged(); //Refresh if the adapter exists
         }
 
         return v;
@@ -122,7 +128,7 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //Extract the string and add it to the recyclerview
-                EditText editItemName = ((AlertDialog) dialog).findViewById(R.id.edit_scheduled_item_name);
+                EditText editItemName = ((AlertDialog) dialog).findViewById(R.id.edit_one_time_item);
                 String userItemName = editItemName.getText().toString();
 
                 //If the user entered a valid name for the new item
@@ -138,25 +144,19 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
 
                         //Update the value in the shared preferences file
                         String fullItemKey = baseItemKey + (itemList.size() - 1); //get the key of the changed item
+                        itemListSharedPrefsEditor = itemListSharedPrefs.edit(); //Initialise the editor
                         itemListSharedPrefsEditor.putString(fullItemKey, userItemName);
                         itemListSharedPrefsEditor.apply();
                     }
 
-                    else {
-                        Toast.makeText(getContext(), "Error. You cannot have more than " + MAX_NO_ITEMS + " items. Delete some before adding more." , Toast.LENGTH_LONG).show();
-                    }
+                    else Toast.makeText(getContext(), "Error. You cannot have more than " + MAX_NO_ITEMS + " items. Delete some before adding more." , Toast.LENGTH_LONG).show();
 
                     return; //No need to check for invalid cases
                 }
 
                 //Inform user about their rejected input for the invalid cases
-                if (userItemName.length() < MIN_ITEM_LENGTH) {
-                    Toast.makeText(getContext(), "Your item name needs to be at least one character!", Toast.LENGTH_LONG).show();
-                }
-
-                if (userItemName.length() > MAX_ITEM_LENGTH) {
-                    Toast.makeText(getContext(), "Your item name needs to be under 100 characters long!", Toast.LENGTH_LONG).show();
-                }
+                if (userItemName.length() < MIN_ITEM_LENGTH) Toast.makeText(getContext(), "Your item name needs to be at least one character!", Toast.LENGTH_LONG).show();
+                if (userItemName.length() > MAX_ITEM_LENGTH) Toast.makeText(getContext(), "Your item name needs to be under 100 characters long!", Toast.LENGTH_LONG).show();
             }
         });
 

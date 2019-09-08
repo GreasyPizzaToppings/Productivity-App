@@ -3,6 +3,7 @@ package com.example.productivityappprototype;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +25,8 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     private SharedPreferences itemListSharedPrefs;
     private String itemListSharedPrefsFile = "com.example.productivityappprototype";
     private SharedPreferences.Editor itemListSharedPrefsEditor;
+    private final String lightGrayBackgroundHex = "#d9d9d9"; //85% white according to w3 schools
+    private final String darkGrayBackgroundHex = "#bfbfbf"; //75% white according to w3 schools
 
     public ItemListAdapter(ItemListFragment context, LinkedList<String> itemList) {
         mInflater = LayoutInflater.from(context.getActivity());
@@ -63,7 +66,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             View dialogView = inflater.inflate(R.layout.item_dialog, null); //Inflate the custom layout into a view
 
             //Attempt to get a handle on the edit text ui component inside to set the text to the current item so the user knows what item they are editing
-            EditText itemEditText = dialogView.findViewById(R.id.edit_scheduled_item_name);
+            EditText itemEditText = dialogView.findViewById(R.id.edit_one_time_item);
 
             //Set the edit text to the current name of the item for increased UI ease of access
             int itemIndex = getLayoutPosition();
@@ -102,7 +105,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //Get a handle on the edittext in the custom layout
-                    EditText editItemName = ((AlertDialog) dialog).findViewById(R.id.edit_scheduled_item_name);
+                    EditText editItemName = ((AlertDialog) dialog).findViewById(R.id.edit_one_time_item);
                     String newItemName = editItemName.getText().toString();
 
                     //Update the name of the view in the recyclerview
@@ -162,6 +165,10 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     public void onBindViewHolder(@NonNull ItemListAdapter.ItemViewHolder itemViewHolder, int position) {
         String mCurrent = itemList.get(position);
         itemViewHolder.item.setText(mCurrent); //Display the word from the word list to the word view inside the holder of the word view
+
+        //---Give the items an alternating coloured background---
+        if((position % 2) == 1)itemViewHolder.item.setBackgroundColor(Color.parseColor(darkGrayBackgroundHex));
+        else itemViewHolder.item.setBackgroundColor(Color.parseColor(lightGrayBackgroundHex));
     }
 
     @Override

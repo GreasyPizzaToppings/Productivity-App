@@ -17,7 +17,6 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
-import android.text.style.StrikethroughSpan;
 import android.text.style.UnderlineSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -82,6 +81,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
     private com.example.productivityappprototype.ScheduleItemListAdapter scheduleItemListAdapter;
     private final int MAX_ITEM_LENGTH = 100;
     private final int MIN_ITEM_LENGTH = 1;
+    private final int MAX_SCHEDULED_ITEMS = 50;
     private TextView itemWidthMeasuringContainer, timeHeaderTextView;
     float recyclerViewWidth, timeTextWidth; //values used for boundary calculations
     private Paint scheduledItemPaint, timeHeaderPaint;
@@ -105,7 +105,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
 
         //---Underline the two header text views---
         //Get a handle on the "item" header text view for the schedule tab
-        TextView itemHeaderTextView = v.findViewById(R.id.text_item);
+        TextView itemHeaderTextView = v.findViewById(R.id.text_item_header);
 
         //Set a spanning string item for the "item" header to make it underlined
         String itemHeader = getContext().getString(R.string.text_item);
@@ -115,7 +115,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         itemHeaderTextView.setText(itemHeaderSpannable); //Update the text and make it underlined
 
         //Repeat the process for the "scheduled time" header text view
-        timeHeaderTextView = v.findViewById(R.id.text_time);
+        timeHeaderTextView = v.findViewById(R.id.text_time_header);
 
         String timeHeader = getContext().getString(R.string.text_time);
         Spannable timeHeaderSpannable = new SpannableString(timeHeader);
@@ -123,9 +123,30 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
 
         timeHeaderTextView.setText(timeHeaderSpannable); //Update the text and make it underlined
 
-        //Get a handle to the floating action button and set its on click listener
+        //Get a handle to the schedule item floating button and set its on click listener
         FloatingActionButton scheduleTaskButton = v.findViewById(R.id.fb_schedule_item);
         scheduleTaskButton.setOnClickListener(this);
+
+        //Get a handle to the unschedule all items floating button and set its on click listener
+        FloatingActionButton unscheduleAllButton = v.findViewById(R.id.fb_unschedule_all);
+        unscheduleAllButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //create and show a dialog to warn them about the action
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(v.getContext());
+                dialogBuilder.setTitle("Clear Schedule");
+                dialogBuilder.setMessage("Are you sure you want to unschedule all your items?");
+                dialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Unschedule all their items if they have any.
+                                if(rawScheduledItems.size() != 0) clearSchedule();
+                            }
+                        });
+                dialogBuilder.setNegativeButton("No", null);
+                dialogBuilder.create().show();
+            }
+        });
 
         //clearSharedPreferences(getContext()); //useful when the shared preferences files are wrong, causing errors.
         return v;
@@ -150,7 +171,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         /*Get a handle on the textview to calculate the boundary which will allow for the time text to be placed
         underneath the "Scheduled Time" header, and for the item text to go before it
         */
-        timeHeaderTextView = view.findViewById(R.id.text_time);
+        timeHeaderTextView = view.findViewById(R.id.text_time_header);
 
         //Initialise paint objects used by the 3 related scheduled item formatting methods
         timeHeaderPaint = timeHeaderTextView.getPaint(); //Used to calculate the width of the header to calculate the boundary
@@ -179,7 +200,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
             //Else just load the old data
             else formattedScheduledItemsWithTimes = restoreStringsFromSharedPrefsFile(formattedScheduledItemsSharedPrefs, formattedScheduledItemsWithTimes);
         }
-        else formattedScheduledItemsWithTimes = restoreStringsFromSharedPrefsFile(formattedScheduledItemsSharedPrefs, formattedScheduledItemsWithTimes);
+        else reformatScheduledItems(); //Ensure they have the right formatting
 
         if(scheduleItemListAdapter != null) scheduleItemListAdapter.notifyDataSetChanged();
     }
@@ -192,6 +213,16 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
             ctx.getSharedPreferences(children[i].replace(".xml", ""), Context.MODE_PRIVATE).edit().clear().commit();
             //delete the file
             new File(dir, children[i]).delete();
+        }
+    }
+
+    //This unschedules all the scheduled items, clearing the schedule for the user
+    public void clearSchedule() {
+        int maxItemIndex = rawScheduledItems.size();
+
+        //Iterate through the items and unschedule each one, from the back to the start
+        for(int itemIndex = maxItemIndex -1; itemIndex >= 0; itemIndex--) {
+            OnUnscheduleItem(itemIndex);
         }
     }
 
@@ -244,32 +275,35 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         builder.setPositiveButton("Schedule Item", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                //When the user hasn't scheduled too many items
+                if(formattedScheduledItemsWithTimes.size() >= MAX_SCHEDULED_ITEMS) { //>= otherwise the no. would go over the max after this item is scheduled
+                    Toast.makeText(getContext(), "Error. You cannot have more than " + MAX_SCHEDULED_ITEMS + " scheduled items. Clean up your schedule.", Toast.LENGTH_LONG).show();
+                    return;
+                }
 
                 //If the user selected an item in some way before pressing 'schedule item'
                 if (selectedItemInDialog != null) {
                     rawScheduledItems.addLast(selectedItemInDialog); //Add the raw name to the list, before it is scheduled and reset to null
-                    ScheduleItem(); //Schedule the item with the given data
+                    ScheduleItem(selectedItemInDialog); //Schedule the item with the given data
                     return;
                 }
 
                 //See if the user entered an item in the one-time option editText instead of selecting an item in the recyclerview
                 else {
-                    if(editTextOneTimeItem.getText().toString().length() != 0) {
-                        //Extract and store the name of the item the user entered
-                        selectedItemInDialog = editTextOneTimeItem.getText().toString();
+                    //Extract and store the name of the item the user entered
+                    String oneTimeItemName = editTextOneTimeItem.getText().toString();
 
-                        //When the item entered this way is legitimate (to stop extremely long names)
-                        if (selectedItemInDialog.length() >= MIN_ITEM_LENGTH && selectedItemInDialog.length() <= MAX_ITEM_LENGTH) {
-                            rawScheduledItems.addLast(selectedItemInDialog); //Add the raw name to the list, before it is scheduled and reset to null
-                            ScheduleItem();
-                            return;
-                        }
+                    //When the item entered this way is legitimate (to stop extremely long names)
+                    if (oneTimeItemName.length() >= MIN_ITEM_LENGTH && oneTimeItemName.length() <= MAX_ITEM_LENGTH) {
+                        rawScheduledItems.addLast(selectedItemInDialog); //Add the raw name to the list, before it is scheduled and reset to null
+                        ScheduleItem(oneTimeItemName);
+                        return;
+                    }
 
-                        //Inform the user about the error case about having an item greater than the maximum length
-                        if (selectedItemInDialog.length() > MAX_ITEM_LENGTH) {
-                            Toast.makeText(getContext(), "Your item name needs to be under 100 characters long!", Toast.LENGTH_LONG).show();
-                            return;
-                        }
+                    //Inform the user about the error case about having an item greater than the maximum length
+                    if (oneTimeItemName.length() > MAX_ITEM_LENGTH) {
+                        Toast.makeText(getContext(), "Your item name needs to be under 100 characters long!", Toast.LENGTH_LONG).show();
+                        return;
                     }
                 }
             }
@@ -289,7 +323,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         //Initially disable the positive button until the user selects an item in some way
         scheduleDialog.getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 
-        editTextOneTimeItem = dialogView.findViewById(R.id.edit_scheduled_item_name); //Get a handle to the edit text for the one-time item
+        editTextOneTimeItem = dialogView.findViewById(R.id.edit_one_time_item); //Get a handle to the edit text for the one-time item
         //--Set the listeners for the text in the edit text changing--
         editTextOneTimeItem.addTextChangedListener(new TextWatcher() {
 
@@ -301,14 +335,10 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void afterTextChanged(Editable s) {
                 //If the user's item has changed and is still a valid item
-                if(editTextOneTimeItem.getText().length() >= 1) {
-                    scheduleDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true); //Enable the schedule item button, as a valid item is entered
-                }
+                if(editTextOneTimeItem.getText().length() >= 1) scheduleDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true); //Enable the schedule item button, as a valid item is entered
 
                 //When the user deletes all of their text in the edit text
-                else {
-                    scheduleDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false); //disable the schedule item button, as no valid item exists
-                }
+                else scheduleDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false); //disable the schedule item button, as no valid item exists
             }
         });
 
@@ -413,8 +443,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
     }
 
     //This method uses the available data to input into the main recycler view in the schedule tab. It will format the entered so that it is displayed effectively.
-    public void ScheduleItem() {
-        String fullUnformattedItem = selectedItemInDialog; //The base item for the full item is the entered item name. It is also the raw item
+    public void ScheduleItem(String itemToSchedule) {
         String startTimeInText;
         String endTimeInText;
 
@@ -443,6 +472,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
             timeTextWidth = scheduledItemPaint.measureText("n/a - " + endTime);
             scheduledItemsStartTimes.addLast("n/a");
             scheduledItemsEndTimes.addLast(endTime.toString());
+
             startTimeInText = "n/a";
             endTimeInText = endTime.toString();
         }
@@ -456,7 +486,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
             endTimeInText = "n/a";
         }
 
-        String fullFormattedItem = FormatSchedulingItem(fullUnformattedItem, startTimeInText, endTimeInText); //Format the full unformatted item with times if they were entered
+        String fullFormattedItem = FormatSchedulingItem(itemToSchedule, startTimeInText, endTimeInText); //Format the full unformatted item with times if they were entered
 
         //Add the formatted item to the list of scheduled items
         formattedScheduledItemsWithTimes.addLast(fullFormattedItem);
@@ -468,7 +498,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         //---Write the data to the shared preferences files---
         String fullItemKey = baseItemKey + (formattedScheduledItemsWithTimes.size() - 1); //Build the key, which is the base key + the index of the item
         rawScheduledItemsSharedPrefsEditor = rawScheduledItemsSharedPrefs.edit();
-        rawScheduledItemsSharedPrefsEditor.putString(fullItemKey, fullUnformattedItem); //The unformatted item is the raw item
+        rawScheduledItemsSharedPrefsEditor.putString(fullItemKey, itemToSchedule); //The unformatted item is the raw item
         rawScheduledItemsSharedPrefsEditor.apply();
 
         formattedScheduledItemsSharedPrefsEditor = formattedScheduledItemsSharedPrefs.edit();
@@ -689,7 +719,6 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
     }
 
     public String GetPadding(float widthToPad) {
-
         //Measure the width of one pad unit in pixels
         String padUnit = " "; //One unit of padding is one space
         float padUnitWidth = scheduledItemPaint.measureText(padUnit);
@@ -698,10 +727,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         String pad = "";
 
         //Add the correct number of pads to the item
-        for(int pads = 0; pads < numberOfPadsRequired; pads++) {
-            pad += padUnit;
-        }
-
+        for(int pads = 0; pads < numberOfPadsRequired; pads++) pad += padUnit;
         return pad;
     }
 
@@ -764,10 +790,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
             editTextOneTimeItem.setEnabled(true); //re-enable the edit text to allow the user to enter an item this way
 
             //When the user deselects a recycler view item, and the edit text has no valid item entered, disable the schedule item button.
-            if(editTextOneTimeItem.getText().length() < 1)
-            {
-                scheduleDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false); //Disable the schedule item button, as an item is now un-selected
-            }
+            if(editTextOneTimeItem.getText().length() < 1) scheduleDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false); //Disable the schedule item button, as an item is now un-selected
         }
     }
 
@@ -843,7 +866,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void OnUnscheduleItem(String itemToUnschedule, int scheduledItemIndex) {
+    public void OnUnscheduleItem(int scheduledItemIndex) {
         //---Remove all the scheduled item's data from the relevant lists---
         rawScheduledItems.remove(scheduledItemIndex); //Remove the item from the raw scheduled item names linked list
         formattedScheduledItemsWithTimes.remove(scheduledItemIndex);
@@ -890,8 +913,6 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         scheduledItemsCompletionStatusSharedPrefsEditor = scheduledItemsCompletionStatusSharedPrefs.edit(); //Initialise the editor
         scheduledItemsCompletionStatusSharedPrefsEditor.putString(fullItemKey, complete);
         scheduledItemsCompletionStatusSharedPrefsEditor.apply();
-
-        //Making the text strikethrough or not is done in the adapter
     }
 
     //This method will move the data elements in the shared preferences file provided back one starting at a given point. This is an effective way of deleting an item and removing gaps in the data.
