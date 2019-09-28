@@ -1,11 +1,13 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintlayout_edit_item_properties"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/text_edit_item_heading"
+        android:id="@+id/text_scheduled_item_properties_heading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -22,24 +24,23 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/text_edit_scheduled_item_name"
+        android:id="@+id/text_edit_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
         android:layout_marginTop="16dp"
         android:text="Edit Item Name"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/edit_one_time_item"
-        app:layout_constraintTop_toBottomOf="@+id/text_edit_item_heading" />
+        app:layout_constraintStart_toStartOf="@+id/edit_scheduled_item_name"
+        app:layout_constraintTop_toBottomOf="@+id/text_scheduled_item_properties_heading" />
 
     <EditText
-        android:id="@+id/edit_one_time_item"
+        android:id="@+id/edit_scheduled_item_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:ems="10"
@@ -49,11 +50,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_edit_scheduled_item_name"
+        app:layout_constraintTop_toBottomOf="@+id/text_edit_item_name"
         tools:targetApi="o" />
 
     <TextView
-        android:id="@+id/text_edit_time_heading"
+        android:id="@+id/text_edit_start_end_time_heading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -67,10 +68,10 @@
         android:typeface="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edit_one_time_item" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_scheduled_item_name"/>
 
     <TextView
-        android:id="@+id/text_start_time"
+        android:id="@+id/text_start_time_heading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -80,22 +81,22 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_edit_time_heading" />
+        app:layout_constraintTop_toBottomOf="@+id/text_edit_start_end_time_heading" />
 
     <Button
         android:id="@+id/button_start_time"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
-        android:layout_marginTop="9dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:text="Update"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_edit_time_heading" />
+        app:layout_constraintTop_toBottomOf="@+id/text_edit_start_end_time_heading" />
 
     <TextView
-        android:id="@+id/text_end_time"
+        android:id="@+id/text_end_time_heading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -108,7 +109,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/button_end_time"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_start_time"
+        app:layout_constraintTop_toBottomOf="@+id/text_start_time_heading"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
@@ -121,10 +122,10 @@
         android:text="Update"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_start_time" />
+        app:layout_constraintTop_toBottomOf="@+id/text_start_time_heading" />
 
     <TextView
-        android:id="@+id/text_update_start_time_selected"
+        android:id="@+id/text_start_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
@@ -132,10 +133,10 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/button_start_time"
-        app:layout_constraintTop_toTopOf="@+id/text_start_time" />
+        app:layout_constraintTop_toTopOf="@+id/text_start_time_heading" />
 
     <TextView
-        android:id="@+id/text_update_end_time_selected"
+        android:id="@+id/text_end_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
@@ -143,7 +144,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/button_end_time"
-        app:layout_constraintTop_toTopOf="@+id/text_end_time" />
+        app:layout_constraintTop_toTopOf="@+id/text_end_time_heading" />
 
     <CheckBox
         android:id="@+id/checkBox_mark_as_completed"

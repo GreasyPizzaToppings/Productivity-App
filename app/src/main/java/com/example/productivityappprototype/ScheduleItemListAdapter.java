@@ -30,15 +30,13 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
     private LinkedList<String> scheduledItemsEndTimes; //Holds the associated end time for each scheduled item. If the user didn't specify a start time, then the value is "n/a"
     private LinkedList<String> scheduledItemsCompletionStatus;
     private UpdateScheduledItemInterface adapterInterface;
-    private final String lightGrayBackgroundHex = "#d9d9d9"; //85% white according to w3 schools
-    private final String darkGrayBackgroundHex = "#bfbfbf"; //75% white according to w3 schools
 
     public interface UpdateScheduledItemInterface {
-        void OnUpdateStartTime(String updatedStartTime, int scheduledItemIndex);
-        void OnUpdateEndTime(String updatedEndTime, int scheduledItemIndex);
-        void OnUpdateItemName(String newItemName, int scheduledItemIndex);
-        void OnUnscheduleItem(int scheduledItemIndex);
-        void OnUpdateItemStatus(String complete, int scheduledItemIndex); //When the user changes the state of the "Mark As Complete" checkbox
+        void onUpdateStartTime(String updatedStartTime, int scheduledItemIndex);
+        void onUpdateEndTime(String updatedEndTime, int scheduledItemIndex);
+        void onUpdateItemName(String newItemName, int scheduledItemIndex);
+        void onUnscheduleItem(int scheduledItemIndex);
+        void onUpdateItemStatus(String complete, int scheduledItemIndex); //When the user changes the state of the "Mark As Complete" checkbox
     }
 
     //Constructor for the class, for the context of the schedule fragment.
@@ -84,16 +82,16 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
             final View dialogView = inflater.inflate(R.layout.schedule_edit_item_dialog, null);
 
             //Set the edit text to the name of the item
-            final EditText scheduledItemEditText = dialogView.findViewById(R.id.edit_one_time_item);
+            final EditText scheduledItemEditText = dialogView.findViewById(R.id.edit_scheduled_item_name);
             final int scheduledItemIndex = getLayoutPosition(); //Get the index of the clicked scheduled item
             scheduledItemEditText.setText(rawScheduledItems.get(scheduledItemIndex));
 
             //Get and display the start time for the item the user selected
-            TextView startTimeTextView = dialogView.findViewById(R.id.text_update_start_time_selected);
+            TextView startTimeTextView = dialogView.findViewById(R.id.text_start_time);
             startTimeTextView.setText(scheduledItemsStartTimes.get(scheduledItemIndex));
 
             //Get and display the end time for the item the user selected
-            TextView endTimeTextView = dialogView.findViewById(R.id.text_update_end_time_selected);
+            TextView endTimeTextView = dialogView.findViewById(R.id.text_end_time);
             endTimeTextView.setText(scheduledItemsEndTimes.get(scheduledItemIndex));
 
             //Get a handle on the checkbox for marking an item as done
@@ -108,7 +106,7 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //Remove the scheduled item from the recyclerview and the scheduled items lists
-                    adapterInterface.OnUnscheduleItem(scheduledItemIndex);
+                    adapterInterface.onUnscheduleItem(scheduledItemIndex);
                 }
             });
 
@@ -129,7 +127,7 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
                         else item.setPaintFlags(item.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
 
                         //Update the data with the new status
-                        adapterInterface.OnUpdateItemStatus(Boolean.toString(markAsCompleted.isChecked()), scheduledItemIndex);
+                        adapterInterface.onUpdateItemStatus(Boolean.toString(markAsCompleted.isChecked()), scheduledItemIndex);
                     }
 
                     String oldItemName = rawScheduledItems.get(scheduledItemIndex);
@@ -141,7 +139,7 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
                         if(newItemName.length() >= MIN_ITEM_LENGTH && newItemName.length() <= MAX_ITEM_LENGTH) {
                             rawScheduledItems.set(scheduledItemIndex, newItemName); //Update the local linked list with the new name
                             //Update the linked lists and shared prefs files in the fragment
-                            adapterInterface.OnUpdateItemName(newItemName, scheduledItemIndex);
+                            adapterInterface.onUpdateItemName(newItemName, scheduledItemIndex);
                             return;
                         }
 
@@ -195,11 +193,11 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
                                 //Convert the selected time to a readable format
                                 startTime = new Time(startTimeInMs - midDayInMs); //Set the correct time, adjusting for a default value of mid day.
                                 //Update the start time text view
-                                TextView startTimeSelected = dialogView.findViewById(R.id.text_update_start_time_selected);
+                                TextView startTimeSelected = dialogView.findViewById(R.id.text_start_time);
                                 startTimeSelected.setText(startTime.toString()); //Show the user what time they selected
 
                                 //Notify the fragment of the change
-                                adapterInterface.OnUpdateStartTime(startTime.toString(), scheduledItemIndex);
+                                adapterInterface.onUpdateStartTime(startTime.toString(), scheduledItemIndex);
                             }
 
                             //When the time is not legit, nothing else needs to happen. They already get an error message. The time-textview will keep displaying the last acceptable time.
@@ -258,11 +256,11 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
                                 endTime = new Time(endTimeInMs - midDayInMs); //Set the correct time, adjusting for a default value of mid day.
 
                                 //Update the start time text view
-                                TextView endTimeSelected = dialogView.findViewById(R.id.text_update_end_time_selected);
+                                TextView endTimeSelected = dialogView.findViewById(R.id.text_end_time);
                                 endTimeSelected.setText(endTime.toString()); //Show the user what time they selected
 
                                 //Notify the fragment of the change
-                                adapterInterface.OnUpdateEndTime(endTime.toString(), scheduledItemIndex);
+                                adapterInterface.onUpdateEndTime(endTime.toString(), scheduledItemIndex);
                             }
 
                             //When the time is not legit, nothing else needs to happen. They already get an error message. The time-textview will keep displaying the last acceptable time.
@@ -329,8 +327,11 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder itemViewHolder, int position) {
+        String lightGrayBackgroundHex = "#d9d9d9"; //85% white according to w3 schools
+        String darkGrayBackgroundHex = "#bfbfbf"; //75% white according to w3 schools
+
         //Make the text strike through if it needs to be
-        if(scheduledItemsCompletionStatus.get(position).equals("true")) itemViewHolder.item.setPaintFlags(itemViewHolder.item.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        if(scheduledItemsCompletionStatus.size() != 0 && scheduledItemsCompletionStatus.get(position).equals("true")) itemViewHolder.item.setPaintFlags(itemViewHolder.item.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         else itemViewHolder.item.setPaintFlags(itemViewHolder.item.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)); //Turn off strike through if necessary
         itemViewHolder.item.setText(formattedScheduledItemsWithTimes.get(position));
 

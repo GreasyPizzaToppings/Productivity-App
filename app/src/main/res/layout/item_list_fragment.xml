@@ -7,7 +7,7 @@
     tools:context=".ItemListFragment">
 
     <TextView
-        android:id="@+id/text_items_header"
+        android:id="@+id/text_items_heading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -24,8 +24,6 @@
         android:id="@+id/text_no_items"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
@@ -33,9 +31,8 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_items_header" />
+        app:layout_constraintStart_toStartOf="@+id/text_items_heading"
+        app:layout_constraintTop_toBottomOf="@+id/text_items_heading" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_item_list"
@@ -51,7 +48,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_items_header" />
+        app:layout_constraintTop_toBottomOf="@+id/text_items_heading" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fb_add_item"

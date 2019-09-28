@@ -5,9 +5,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-
     <EditText
-        android:id="@+id/edit_one_time_item"
+        android:id="@+id/edit_item_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -20,5 +19,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 </android.support.constraint.ConstraintLayout>

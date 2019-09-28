@@ -4,7 +4,7 @@
     <string name="tab_label_schedule">Schedule</string>
     <string name="tab_label_item_list">Item List</string>
     <string name="tab_label_statistics">Statistics</string>
-    <string name="text_no_items">No items to see here! Add them with the button in the bottom right corner.</string>
+    <string name="text_no_items">You have no items yet! You can add them with the plus button below.</string>
     <string name="dialog_delete">Delete item</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_done">Done</string>
@@ -20,4 +20,7 @@
     <string name="end_time">End Time:</string>
     <string name="start_time">Start Time:</string>
     <string name="awaiting_selection">Awaiting…</string>
+    <string name="use_an_existing_item">OR Use An Existing Item</string>
+    <string name="one_time_item_message">Use A One-Time Item</string>
+    <string name="text_no_scheduled_items">You currently have no scheduled items. You can add them with the plus button below.</string>
 </resources>

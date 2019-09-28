@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.LinkedList;
-
 import static android.content.Context.MODE_PRIVATE;
 
 public class ItemListFragment extends Fragment implements View.OnClickListener {
@@ -30,9 +29,7 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
     private final int MIN_ITEM_LENGTH = 1;
     private final String baseItemKey = "item:"; //The base key used to store the items in the bundle
     private SharedPreferences itemListSharedPrefs;
-    private String itemListSharedPrefsFile = "com.example.productivityappprototype";
     private SharedPreferences.Editor itemListSharedPrefsEditor;
-    private final String ITEM_NOT_FOUND = "";
 
     /*The maximum number of items that can be contained within the item list recycler view. For potential performance reasons, this is limited.
     Also, if the user has more than 100 things to do, they SHOULD remove some items and prioritise.
@@ -60,10 +57,11 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
         itemHeaderSpannable.setSpan(new UnderlineSpan(), 0, itemsHeader.length(), 0); //Make the text underlined
 
         //Display the underlined header
-        TextView itemsHeaderTextView = v.findViewById(R.id.text_items_header);
+        TextView itemsHeaderTextView = v.findViewById(R.id.text_items_heading);
         itemsHeaderTextView.setText(itemHeaderSpannable);
 
         //Initialise the SharedPreferences object
+        String itemListSharedPrefsFile = "com.example.productivityappprototype";
         itemListSharedPrefs = getActivity().getSharedPreferences(itemListSharedPrefsFile, MODE_PRIVATE);
 
         //Restore the data from the SharedPreferences file
@@ -71,6 +69,7 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
             //Use the bundle size as the linked list gets reinitialised to size 0 after every config change. -1 because there is always a bool variable stored as well
             for(int item = 0; item < itemListSharedPrefsFile.length(); item++) {
                 String fullItemKey = baseItemKey + item; //Build the key used to predictably store the items in the file
+                String ITEM_NOT_FOUND = "";
                 String restoredItem = itemListSharedPrefs.getString(fullItemKey, ITEM_NOT_FOUND); //Blank default values are the error case as you cannot have an item with no length
 
                 //Restore items that were found in the restored shared preference
@@ -101,12 +100,8 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
 
     //This method displays the textview telling the user how to add items if there are no items in the item list
     public void ToggleTutorialMessage() {
-        if (itemList.size() >= 1) {
-            tutorialMessage.setVisibility(View.INVISIBLE);
-        }
-        else {
-            tutorialMessage.setVisibility(View.VISIBLE);
-        }
+        if (itemList.size() >= 1) tutorialMessage.setVisibility(View.INVISIBLE);
+        else tutorialMessage.setVisibility(View.VISIBLE);
     }
 
     //The click event for the floating action button, which displays a dialog to allow the user to add an item to the item list
@@ -128,7 +123,7 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //Extract the string and add it to the recyclerview
-                EditText editItemName = ((AlertDialog) dialog).findViewById(R.id.edit_one_time_item);
+                EditText editItemName = ((AlertDialog) dialog).findViewById(R.id.edit_item_name);
                 String userItemName = editItemName.getText().toString();
 
                 //If the user entered a valid name for the new item

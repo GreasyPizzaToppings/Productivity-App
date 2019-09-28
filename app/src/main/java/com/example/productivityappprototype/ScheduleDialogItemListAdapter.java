@@ -21,7 +21,7 @@ public class ScheduleDialogItemListAdapter extends RecyclerView.Adapter<Schedule
 
     //This interface tells the ScheduleFragment what item was selected, to enable the functionality of the schedule new item dialog.
     public interface AddScheduledItemInterface {
-        void OnClickDialogItem(String itemName, boolean selected);
+        void onClickDialogItem(String itemName, boolean selected);
     }
 
     //Constructor for the class, for the context of the schedule fragment.
@@ -58,13 +58,13 @@ public class ScheduleDialogItemListAdapter extends RecyclerView.Adapter<Schedule
             if(item != previouslySelectedItem) {
                 //Change the background colour of the item in the recycler view, to give visual feedback to the user
                 item.setBackgroundColor(Color.rgb(132, 195, 237));
-                adapterInterface.OnClickDialogItem(item.getText().toString(), true); //Make the method call from the interface, to be received by the fragment
+                adapterInterface.onClickDialogItem(item.getText().toString(), true); //Make the method call from the interface, to be received by the fragment
                 previouslySelectedItem = item; //Store the value of the item that was selected, to allow selected items to be unselected
             }
 
             //When the user deselects a previously selected item
             else {
-                adapterInterface.OnClickDialogItem(item.getText().toString(), false);
+                adapterInterface.onClickDialogItem(item.getText().toString(), false);
                 //Reset the previouslySelected item so that the user can reselect a deselected item
                 previouslySelectedItem = null;
             }

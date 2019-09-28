@@ -22,18 +22,15 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     private final int MAX_ITEM_LENGTH = 100;
     private final int MIN_ITEM_LENGTH = 1;
     private final String baseItemKey = "item:"; //The base key used to store the items in the bundle
-    private SharedPreferences itemListSharedPrefs;
-    private String itemListSharedPrefsFile = "com.example.productivityappprototype";
     private SharedPreferences.Editor itemListSharedPrefsEditor;
-    private final String lightGrayBackgroundHex = "#d9d9d9"; //85% white according to w3 schools
-    private final String darkGrayBackgroundHex = "#bfbfbf"; //75% white according to w3 schools
 
     public ItemListAdapter(ItemListFragment context, LinkedList<String> itemList) {
         mInflater = LayoutInflater.from(context.getActivity());
         this.itemList = itemList;
 
         //Initialise the SharedPreferences object
-        itemListSharedPrefs = context.getActivity().getSharedPreferences(itemListSharedPrefsFile, Context.MODE_PRIVATE);
+        String itemListSharedPrefsFile = "com.example.productivityappprototype";
+        SharedPreferences itemListSharedPrefs = context.getActivity().getSharedPreferences(itemListSharedPrefsFile, Context.MODE_PRIVATE);
         itemListSharedPrefsEditor = itemListSharedPrefs.edit(); //Initialise the editor
     }
 
@@ -48,7 +45,6 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             this.mAdapter = adapter;
             itemView.setOnClickListener(this); //Set the onClick listener to detect clicks
         }
-
 
         //On the click of the item in the recyclerview, display an alert dialog to allow the user to change the name of the item, or to delete it
         @Override
@@ -66,7 +62,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             View dialogView = inflater.inflate(R.layout.item_dialog, null); //Inflate the custom layout into a view
 
             //Attempt to get a handle on the edit text ui component inside to set the text to the current item so the user knows what item they are editing
-            EditText itemEditText = dialogView.findViewById(R.id.edit_one_time_item);
+            EditText itemEditText = dialogView.findViewById(R.id.edit_item_name);
 
             //Set the edit text to the current name of the item for increased UI ease of access
             int itemIndex = getLayoutPosition();
@@ -105,7 +101,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //Get a handle on the edittext in the custom layout
-                    EditText editItemName = ((AlertDialog) dialog).findViewById(R.id.edit_one_time_item);
+                    EditText editItemName = ((AlertDialog) dialog).findViewById(R.id.edit_item_name);
                     String newItemName = editItemName.getText().toString();
 
                     //Update the name of the view in the recyclerview
@@ -167,6 +163,10 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         itemViewHolder.item.setText(mCurrent); //Display the word from the word list to the word view inside the holder of the word view
 
         //---Give the items an alternating coloured background---
+        //85% white according to w3 schools
+        String lightGrayBackgroundHex = "#d9d9d9";
+        //75% white according to w3 schools
+        String darkGrayBackgroundHex = "#bfbfbf";
         if((position % 2) == 1)itemViewHolder.item.setBackgroundColor(Color.parseColor(darkGrayBackgroundHex));
         else itemViewHolder.item.setBackgroundColor(Color.parseColor(lightGrayBackgroundHex));
     }
