@@ -8,7 +8,7 @@
 
 
     <TextView
-        android:id="@+id/text_select_an_item_to_schedule_heading"
+        android:id="@+id/text_schedule_a_new_item_heading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -16,7 +16,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="@string/select_item"
+        android:text="@string/schedule_new_item_heading"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textSize="21sp"
         android:typeface="normal"
@@ -32,8 +32,6 @@
         android:text="@string/use_an_existing_item"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/recyclerview_existing_items"
-        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="@+id/recyclerview_existing_items"
         app:layout_constraintTop_toBottomOf="@id/edit_one_time_item" />
 
@@ -46,6 +44,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:background="#284CAF50"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_use_an_existing_item" />
@@ -54,17 +53,12 @@
         android:id="@+id/text_use_a_one_time_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:text="@string/one_time_item_message"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_select_an_item_to_schedule_heading" />
+        app:layout_constraintStart_toStartOf="@+id/edit_one_time_item"
+        app:layout_constraintTop_toBottomOf="@+id/text_schedule_a_new_item_heading" />
 
 
     <EditText
@@ -122,12 +116,34 @@
         android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:text="@string/choose"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_clear_start_time"
         app:layout_constraintTop_toBottomOf="@+id/text_select_start_end_time_heading" />
+
+    <Button
+        android:id="@+id/button_clear_start_time"
+        android:layout_width="70dp"
+        android:layout_height="36dp"
+        android:textColor="@android:color/holo_red_dark"
+        android:text="@string/clear"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/button_clear_end_time"
+        app:layout_constraintTop_toTopOf="@+id/button_start_time" />
+
+    <Button
+        android:id="@+id/button_clear_end_time"
+        android:layout_width="70dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:textColor="@android:color/holo_red_dark"
+        android:text="@string/clear"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button_end_time" />
 
     <TextView
         android:id="@+id/text_end_time_heading"
@@ -150,11 +166,9 @@
         android:id="@+id/button_end_time"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:text="@string/choose"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/button_start_time"
         app:layout_constraintTop_toBottomOf="@+id/button_start_time" />
 
     <TextView
@@ -182,4 +196,30 @@
         app:layout_constraintEnd_toEndOf="@+id/text_start_time"
         app:layout_constraintStart_toStartOf="@+id/text_start_time"
         app:layout_constraintTop_toTopOf="@+id/text_end_time_heading" />
+
+    <TextView
+        android:id="@+id/text_item_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="@string/n_a"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/text_item_duration_heading"
+        app:layout_constraintTop_toTopOf="@+id/text_item_duration_heading" />
+
+    <TextView
+        android:id="@+id/text_item_duration_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/duration"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_end_time_heading" />
+
 </android.support.constraint.ConstraintLayout>

@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Baxter\\Desktop\\ProductivityApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v24\\values-v24.xml",
+            "outputFile": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v24\\values-v24.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\e0140becc58a71053dde82013d41b193\\res\\values-v24\\values-v24.xml",

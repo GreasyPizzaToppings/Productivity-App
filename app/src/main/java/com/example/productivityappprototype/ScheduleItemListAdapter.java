@@ -22,6 +22,7 @@ import java.sql.Time;
 import java.util.Calendar;
 import java.util.LinkedList;
 
+//This is the adapter for the data in the recyclerview holding the scheduled items in the schedule tab. It therefore also has the onClick events for each scheduled item.
 public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemListAdapter.ItemViewHolder> {
     private LayoutInflater mInflater;
     private LinkedList<String> rawScheduledItems; //The list of raw item names (Not including times) that the user has scheduled through the scheduling dialog. Some items may not appear in the item list.
@@ -39,7 +40,6 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
         void onUpdateItemStatus(String complete, int scheduledItemIndex); //When the user changes the state of the "Mark As Complete" checkbox
     }
 
-    //Constructor for the class, for the context of the schedule fragment.
     public ScheduleItemListAdapter(ScheduleFragment scheduleFragment, LinkedList<String> rawScheduledItems, LinkedList<String> formattedScheduledItemsWithTimes, LinkedList<String> scheduledItemsStartTimes, LinkedList<String> scheduledItemsEndTimes,LinkedList<String> scheduledItemsCompletionStatus , UpdateScheduledItemInterface adapterInterface) {
         mInflater = LayoutInflater.from(scheduleFragment.getActivity()); //Initialise the inflater used to inflate the layout the view holder for each item
         this.rawScheduledItems = rawScheduledItems;
@@ -62,6 +62,7 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
         private final int MIN_ITEM_LENGTH = 1;
         private final String baseItemKey = "item:"; //The base key used to store the items in the bundle
         private final String ITEM_NOT_FOUND = "";
+        private ScheduledItemTimeManager scheduledItemTimeManager = new ScheduledItemTimeManager(itemView.getContext()); //The time manager for the operations on the start and end times of the scheduled item
 
         //Initialises the view holder text view from the word xml resource and sets its adapter
         public ItemViewHolder(View itemView, ScheduleItemListAdapter adapter) {
@@ -79,7 +80,7 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
 
             //Inflate the layout into a view for access to the components
             LayoutInflater inflater = LayoutInflater.from(v.getContext());
-            final View dialogView = inflater.inflate(R.layout.schedule_edit_item_dialog, null);
+            final View dialogView = inflater.inflate(R.layout.scheduled_item_properties_dialog, null);
 
             //Set the edit text to the name of the item
             final EditText scheduledItemEditText = dialogView.findViewById(R.id.edit_scheduled_item_name);
@@ -93,6 +94,10 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
             //Get and display the end time for the item the user selected
             TextView endTimeTextView = dialogView.findViewById(R.id.text_end_time);
             endTimeTextView.setText(scheduledItemsEndTimes.get(scheduledItemIndex));
+
+            //Get and display the duration of the item
+            final TextView durationTextView = dialogView.findViewById(R.id.text_item_duration);
+            durationTextView.setText(scheduledItemTimeManager.GetDurationText(scheduledItemsStartTimes.get(scheduledItemIndex), scheduledItemsEndTimes.get(scheduledItemIndex)));
 
             //Get a handle on the checkbox for marking an item as done
             final CheckBox markAsCompleted = dialogView.findViewById(R.id.checkBox_mark_as_completed);
@@ -117,7 +122,7 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
                 }
             });
 
-            builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //---See if the user has changed the item's completion status---
@@ -137,7 +142,6 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
                     if(!oldItemName.equals(newItemName)){
                         //If the new name is legitimate
                         if(newItemName.length() >= MIN_ITEM_LENGTH && newItemName.length() <= MAX_ITEM_LENGTH) {
-                            rawScheduledItems.set(scheduledItemIndex, newItemName); //Update the local linked list with the new name
                             //Update the linked lists and shared prefs files in the fragment
                             adapterInterface.onUpdateItemName(newItemName, scheduledItemIndex);
                             return;
@@ -189,7 +193,7 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
                             }
 
                             //If the specified time is possible
-                            if(ScheduledTimeLegitimate(startTimeInMs, endTimeInMs, currentTimeInMs, v.getContext())) {
+                            if(scheduledItemTimeManager.IsScheduledTimeLegitimate(startTimeInMs, endTimeInMs, currentTimeInMs, v.getContext())) {
                                 //Convert the selected time to a readable format
                                 startTime = new Time(startTimeInMs - midDayInMs); //Set the correct time, adjusting for a default value of mid day.
                                 //Update the start time text view
@@ -198,6 +202,9 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
 
                                 //Notify the fragment of the change
                                 adapterInterface.onUpdateStartTime(startTime.toString(), scheduledItemIndex);
+
+                                //Update the duration
+                                durationTextView.setText(scheduledItemTimeManager.GetDurationText(scheduledItemsStartTimes.get(scheduledItemIndex), scheduledItemsEndTimes.get(scheduledItemIndex)));
                             }
 
                             //When the time is not legit, nothing else needs to happen. They already get an error message. The time-textview will keep displaying the last acceptable time.
@@ -208,7 +215,6 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
                     timePickerDialog.show();
                 }
             });
-
 
             //--Set the functionality of the Update End Time Button--
             //Initialise the calendar for the time setting buttons
@@ -250,17 +256,25 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
                                 startTimeInMs = (startHour*60*60*1000) + (startMinute*60*1000);
                             }
 
-                            //If the specified time is possible
-                            if(ScheduledTimeLegitimate(startTimeInMs, endTimeInMs, currentTimeInMs, v.getContext())) {
-                                //Convert the selected time to a readable format
-                                endTime = new Time(endTimeInMs - midDayInMs); //Set the correct time, adjusting for a default value of mid day.
+                            //If the specified time is possible (pass in the default value for start time to allow the user to update the end time when the start time has already passed)
+                            if(scheduledItemTimeManager.IsScheduledTimeLegitimate(defaultStartEndTimeInMs, endTimeInMs, currentTimeInMs, v.getContext())) {
+                                //Do the only necessary check manually because passing in the default value does not test for this
+                                if(endTimeInMs > startTimeInMs) {
+                                    //Convert the selected time to a readable format
+                                    endTime = new Time(endTimeInMs - midDayInMs); //Set the correct time, adjusting for a default value of mid day.
 
-                                //Update the start time text view
-                                TextView endTimeSelected = dialogView.findViewById(R.id.text_end_time);
-                                endTimeSelected.setText(endTime.toString()); //Show the user what time they selected
+                                    //Update the end time text view
+                                    TextView endTimeSelected = dialogView.findViewById(R.id.text_end_time);
+                                    endTimeSelected.setText(endTime.toString()); //Show the user what time they selected
 
-                                //Notify the fragment of the change
-                                adapterInterface.onUpdateEndTime(endTime.toString(), scheduledItemIndex);
+                                    //Notify the fragment of the change
+                                    adapterInterface.onUpdateEndTime(endTime.toString(), scheduledItemIndex);
+
+                                    //Update the duration
+                                    durationTextView.setText(scheduledItemTimeManager.GetDurationText(scheduledItemsStartTimes.get(scheduledItemIndex), scheduledItemsEndTimes.get(scheduledItemIndex)));
+                                }
+
+                                else Toast.makeText(v.getContext(), "Your end time needs to be after your start time!", Toast.LENGTH_LONG).show();
                             }
 
                             //When the time is not legit, nothing else needs to happen. They already get an error message. The time-textview will keep displaying the last acceptable time.
@@ -271,50 +285,49 @@ public class ScheduleItemListAdapter extends RecyclerView.Adapter<ScheduleItemLi
                     timePickerDialog.show();
                 }
             });
+
+            //--Set the clearing functionality of the clear start and end time buttons---
+            Button clearStartTimeButton = dialogView.findViewById(R.id.button_clear_start_time);
+            clearStartTimeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Clear the start times
+                    startTimeInMs = defaultStartEndTimeInMs;
+                    startTime = null;
+
+                    //Reset the texts
+                    TextView startTimeSelected = dialogView.findViewById(R.id.text_start_time);
+                    startTimeSelected.setText(R.string.awaiting_selection); //Reset to default value
+
+                    //Notify the fragment of the change
+                    adapterInterface.onUpdateStartTime(v.getContext().getString(R.string.n_a), scheduledItemIndex);
+
+                    durationTextView.setText(v.getContext().getString(R.string.n_a)); //duration is not possible anymore
+                }
+            });
+
+            Button clearEndTimeButton = dialogView.findViewById(R.id.button_clear_end_time);
+            clearEndTimeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Clear the end times
+                    endTimeInMs = defaultStartEndTimeInMs; //Reset the selected time to default value
+                    endTime = null;
+
+                    //Reset the texts
+                    TextView endTimeSelected = dialogView.findViewById(R.id.text_end_time);
+                    endTimeSelected.setText(R.string.awaiting_selection); //Reset to default value
+
+                    //Notify the fragment of the change
+                    adapterInterface.onUpdateEndTime(v.getContext().getString(R.string.n_a), scheduledItemIndex);
+
+                    durationTextView.setText(v.getContext().getString(R.string.n_a)); //duration is not possible anymore
+                }
+            });
+
+
             builder.setView(dialogView); //Set the custom layout for the dialog
             builder.create().show();
-        }
-
-        /* This method performs a series of checks to ensure that the schedule time(s) are able to be realistically completed. If the time is confirmed to be legit, true is returned.
-        Appropriate error messages are displayed via Toasts when the selected time is not legit. */
-        public Boolean ScheduledTimeLegitimate(long startTimeInMs, long endTimeInMs, long currentTimeInMs, Context context) {
-
-            //Check the cases when both a start time and an end time are entered
-            if(startTimeInMs != defaultStartEndTimeInMs && endTimeInMs != defaultStartEndTimeInMs) {
-                //1. Check if the user has planned to start or end an item before the current time (in the past)
-                if(startTimeInMs < currentTimeInMs  || endTimeInMs < currentTimeInMs) {
-                    Toast.makeText(context, "You cannot schedule an item to start or end before the current time!", Toast.LENGTH_LONG).show(); //Display an appropriate error message to let user know what was wrong about their selection
-                    return false;
-                }
-
-                //2. If the start time is after the end time it is not a legit time
-                if(startTimeInMs > endTimeInMs) {
-                    Toast.makeText(context, "Your start time needs to be before your end time!", Toast.LENGTH_LONG).show(); //Display an appropriate error message to let user know what was wrong about their selection
-                    return false;
-                }
-
-                //3. If the two times do not have their default values and if they are same, it is not legit
-                if((startTimeInMs == endTimeInMs )) {
-                    Toast.makeText(context, "You cannot start and end an item at the same time!", Toast.LENGTH_LONG).show(); //Display an appropriate error message to let user know what was wrong about their selection
-                    return false;
-                }
-            }
-
-            //When the user has only selected a start time or an end time, but not both
-            else {
-                //The earliest time the user should be able to start an item is directly after they press set item, hence < and not <= like with endTimeInMs.
-                if(startTimeInMs != defaultStartEndTimeInMs && startTimeInMs < currentTimeInMs) {
-                    Toast.makeText(context, "You cannot start an item in the past!", Toast.LENGTH_LONG).show(); //Display an appropriate error message to let user know what was wrong about their selection
-                    return false;
-                }
-
-                //The user cannot end an item just as they schedule it, hence <=.
-                if (endTimeInMs != defaultStartEndTimeInMs && endTimeInMs <= currentTimeInMs) {
-                    Toast.makeText(context, "You cannot end an item in the past!", Toast.LENGTH_LONG).show(); //Display an appropriate error message to let user know what was wrong about their selection
-                    return false;
-                }
-            }
-            return true; //If this point is reached, the time is presumed to be legitimate
         }
     }
 

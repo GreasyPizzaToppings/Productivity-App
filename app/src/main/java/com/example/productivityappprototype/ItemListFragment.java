@@ -20,19 +20,19 @@ import android.widget.Toast;
 import java.util.LinkedList;
 import static android.content.Context.MODE_PRIVATE;
 
-public class ItemListFragment extends Fragment implements View.OnClickListener {
+public class ItemListFragment extends Fragment implements View.OnClickListener, ItemListAdapter.UpdateItemsInterface {
     public LinkedList<String> itemList = new LinkedList<>();
     private RecyclerView itemListRecyclerView;
     private TextView tutorialMessage = null;
     private com.example.productivityappprototype.ItemListAdapter adapter;
     private final int MAX_ITEM_LENGTH = 100;
     private final int MIN_ITEM_LENGTH = 1;
-    private final String baseItemKey = "item:"; //The base key used to store the items in the bundle
     private SharedPreferences itemListSharedPrefs;
-    private SharedPreferences.Editor itemListSharedPrefsEditor;
+
+    private SharedPreferencesFileManager sharedPrefsManager;
 
     /*The maximum number of items that can be contained within the item list recycler view. For potential performance reasons, this is limited.
-    Also, if the user has more than 100 things to do, they SHOULD remove some items and prioritise.
+    Also, if the user has more than 100 things to do, they should probably remove some items and prioritise.
     */
     private final int MAX_NO_ITEMS = 100;
 
@@ -64,21 +64,11 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
         String itemListSharedPrefsFile = "com.example.productivityappprototype";
         itemListSharedPrefs = getActivity().getSharedPreferences(itemListSharedPrefsFile, MODE_PRIVATE);
 
-        //Restore the data from the SharedPreferences file
-        if(!itemListSharedPrefsFile.isEmpty()) {
-            //Use the bundle size as the linked list gets reinitialised to size 0 after every config change. -1 because there is always a bool variable stored as well
-            for(int item = 0; item < itemListSharedPrefsFile.length(); item++) {
-                String fullItemKey = baseItemKey + item; //Build the key used to predictably store the items in the file
-                String ITEM_NOT_FOUND = "";
-                String restoredItem = itemListSharedPrefs.getString(fullItemKey, ITEM_NOT_FOUND); //Blank default values are the error case as you cannot have an item with no length
+        //Initialise the shared prefs file manager
+        sharedPrefsManager = new SharedPreferencesFileManager(this.getContext());
 
-                //Restore items that were found in the restored shared preference
-                if (restoredItem != ITEM_NOT_FOUND) itemList.addLast(restoredItem);
-            }
-
-            if (adapter != null) adapter.notifyDataSetChanged(); //Refresh if the adapter exists
-        }
-
+        //Restore the data from the shared prefs file
+        sharedPrefsManager.restoreStringsFromFile(itemListSharedPrefs, itemList);
         return v;
     }
 
@@ -88,7 +78,7 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
         itemListRecyclerView = getView().findViewById(R.id.recyclerview_item_list);
 
         //Create the adapter and supply the data to be displayed
-        adapter = new ItemListAdapter(this, itemList);
+        adapter = new ItemListAdapter(this, itemList, this);
         itemListRecyclerView.setAdapter(adapter); //Attach the adapter to the recycler view
 
         //Assign the recycler view a default layout manager
@@ -100,8 +90,19 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
 
     //This method displays the textview telling the user how to add items if there are no items in the item list
     public void ToggleTutorialMessage() {
-        if (itemList.size() >= 1) tutorialMessage.setVisibility(View.INVISIBLE);
-        else tutorialMessage.setVisibility(View.VISIBLE);
+        TextView textViewItemsHeading = getView().findViewById(R.id.text_items_heading);
+
+        //Hide the tutorial message
+        if (itemList.size() >= 1) {
+            textViewItemsHeading.setVisibility(View.VISIBLE);
+            tutorialMessage.setVisibility(View.INVISIBLE);
+        }
+
+        //Show the tutorial message
+        else {
+            textViewItemsHeading.setVisibility(View.INVISIBLE);
+            tutorialMessage.setVisibility(View.VISIBLE);
+        }
     }
 
     //The click event for the floating action button, which displays a dialog to allow the user to add an item to the item list
@@ -111,7 +112,7 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         //Set the properties of the dialog
-        builder.setTitle("New Item");
+        builder.setTitle("Add New Item");
         builder.setMessage("Set the name of your new item.");
 
         //Get the layout inflater for the custom layout and inflate the layout for the dialog
@@ -124,24 +125,21 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
             public void onClick(DialogInterface dialog, int which) {
                 //Extract the string and add it to the recyclerview
                 EditText editItemName = ((AlertDialog) dialog).findViewById(R.id.edit_item_name);
-                String userItemName = editItemName.getText().toString();
+                String newItemName = editItemName.getText().toString();
 
                 //If the user entered a valid name for the new item
-                if (userItemName.length() >= MIN_ITEM_LENGTH && userItemName.length() <= MAX_ITEM_LENGTH) {
+                if (newItemName.length() >= MIN_ITEM_LENGTH && newItemName.length() <= MAX_ITEM_LENGTH) {
 
                     //When the user hasn't made too many items
                     if(itemList.size() < MAX_NO_ITEMS) {
-                        itemList.addLast(userItemName); //add the new item to the recycler view
-                        ToggleTutorialMessage(); //Hide the no items message after updating the list
+                        itemList.addLast(newItemName); //add the new item to the recycler view
+
+                        sharedPrefsManager.updateItemAt(itemList.size() - 1, newItemName, itemListSharedPrefs); //Add the new item to the shared prefs file
 
                         adapter.notifyDataSetChanged();
                         itemListRecyclerView.smoothScrollToPosition(itemList.size() - 1);
 
-                        //Update the value in the shared preferences file
-                        String fullItemKey = baseItemKey + (itemList.size() - 1); //get the key of the changed item
-                        itemListSharedPrefsEditor = itemListSharedPrefs.edit(); //Initialise the editor
-                        itemListSharedPrefsEditor.putString(fullItemKey, userItemName);
-                        itemListSharedPrefsEditor.apply();
+                        ToggleTutorialMessage();
                     }
 
                     else Toast.makeText(getContext(), "Error. You cannot have more than " + MAX_NO_ITEMS + " items. Delete some before adding more." , Toast.LENGTH_LONG).show();
@@ -150,8 +148,8 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
                 }
 
                 //Inform user about their rejected input for the invalid cases
-                if (userItemName.length() < MIN_ITEM_LENGTH) Toast.makeText(getContext(), "Your item name needs to be at least one character!", Toast.LENGTH_LONG).show();
-                if (userItemName.length() > MAX_ITEM_LENGTH) Toast.makeText(getContext(), "Your item name needs to be under 100 characters long!", Toast.LENGTH_LONG).show();
+                if (newItemName.length() < MIN_ITEM_LENGTH) Toast.makeText(getContext(), "Your item name needs to be at least one character!", Toast.LENGTH_LONG).show();
+                if (newItemName.length() > MAX_ITEM_LENGTH) Toast.makeText(getContext(), "Your item name needs to be under 100 characters long!", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -164,5 +162,20 @@ public class ItemListFragment extends Fragment implements View.OnClickListener {
         });
 
         builder.create().show(); //Build and show the dialog
+    }
+
+    @Override
+    public void onDeleteItem(int itemIndex) {
+        itemList.remove(itemIndex); //Delete the selected word from the local linked list
+        sharedPrefsManager.removeItemAt(itemIndex, itemListSharedPrefs, itemList);//Delete the item from the shared preferences file
+        adapter.notifyDataSetChanged();
+        ToggleTutorialMessage();
+    }
+
+    @Override
+    public void onUpdateItemName(String newItemName, int itemIndex) {
+        itemList.set(itemIndex, newItemName); //Update the local linked list
+        sharedPrefsManager.updateItemAt(itemIndex, newItemName, itemListSharedPrefs); //Update the shared prefs file
+        adapter.notifyDataSetChanged();
     }
 }

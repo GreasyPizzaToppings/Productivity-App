@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Baxter\\Desktop\\ProductivityApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+            "outputFile": "C:\\Users\\Baxter\\Documents\\Android_Applications\\ProductivityApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-sw600dp-v13\\values-sw600dp-v13.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Baxter\\.gradle\\caches\\transforms-2\\files-2.1\\5c31ca3911fa850e701dca344c35c2e4\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",

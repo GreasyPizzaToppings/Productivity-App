@@ -1,8 +1,6 @@
 package com.example.productivityappprototype;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -18,20 +16,20 @@ import java.util.LinkedList;
 public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemViewHolder> {
     private final LinkedList<String> itemList;
     private LayoutInflater mInflater;
-    private TextView tutorialMessage = null;
     private final int MAX_ITEM_LENGTH = 100;
     private final int MIN_ITEM_LENGTH = 1;
-    private final String baseItemKey = "item:"; //The base key used to store the items in the bundle
-    private SharedPreferences.Editor itemListSharedPrefsEditor;
+    private UpdateItemsInterface adapterInterface;
 
-    public ItemListAdapter(ItemListFragment context, LinkedList<String> itemList) {
+    //The interface which alerts the fragment of changes to the data so it can make the necessary changes
+    public interface UpdateItemsInterface {
+        void onDeleteItem(int itemIndex);
+        void onUpdateItemName(String newItemName, int itemIndex);
+    }
+
+    public ItemListAdapter(ItemListFragment context, LinkedList<String> itemList, UpdateItemsInterface adapterInterface) {
         mInflater = LayoutInflater.from(context.getActivity());
         this.itemList = itemList;
-
-        //Initialise the SharedPreferences object
-        String itemListSharedPrefsFile = "com.example.productivityappprototype";
-        SharedPreferences itemListSharedPrefs = context.getActivity().getSharedPreferences(itemListSharedPrefsFile, Context.MODE_PRIVATE);
-        itemListSharedPrefsEditor = itemListSharedPrefs.edit(); //Initialise the editor
+        this.adapterInterface = adapterInterface;
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -72,19 +70,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             builder.setNeutralButton(R.string.dialog_delete, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    int itemIndex = getLayoutPosition(); //Get the position of the clicked item to know what word holder was clicked
-                    itemList.remove(itemIndex); //Delete the selected word from the item list
-
-                    //Delete the item from the shared preferences file using custom method to shift the data and avoid gaps
-                    RemoveItemAt(itemIndex);
-
-                    //Show the tutorial message if there are no items
-                    if(itemList.size() == 0) {
-                        tutorialMessage = v.getRootView().findViewById(R.id.text_no_items);
-                        tutorialMessage.setVisibility(View.VISIBLE);
-                    }
-
-                    mAdapter.notifyDataSetChanged(); //Get the adapter to refresh and update the recycler view to the changed data
+                    adapterInterface.onDeleteItem(getLayoutPosition());
                 }
             });
 
@@ -107,14 +93,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
                     //Update the name of the view in the recyclerview
                     if (newItemName.length() >= MIN_ITEM_LENGTH && newItemName.length() <= MAX_ITEM_LENGTH) {
                         int itemIndex = getLayoutPosition(); //Get the position of the clicked item to know what word holder was clicked
-                        itemList.set(itemIndex, newItemName); //Update the word in the wordlist with the new word
-                        notifyDataSetChanged();
-
-                        //Update the value in the shared preferences file
-                        String fullItemKey = baseItemKey + itemIndex; //get the key of the changed item
-                        itemListSharedPrefsEditor.putString(fullItemKey, newItemName);
-                        itemListSharedPrefsEditor.apply();
-
+                        adapterInterface.onUpdateItemName(newItemName, itemIndex);
                         return; //No need to check for invalid cases
                     }
 
@@ -133,22 +112,6 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             builder.create().show();
         }
     }
-
-    public void RemoveItemAt(int indexDelete) {
-
-        //Move the items after this element back one, overwriting the data which effectively deletes the unwanted item.
-        for(int indexItem = indexDelete; indexItem < itemList.size(); indexItem++) {
-            //Build the key
-            String finalItemKey = baseItemKey + indexItem;
-
-            itemListSharedPrefsEditor.putString(finalItemKey, itemList.get(indexItem));
-        }
-
-        //Delete the last item to remove the double-up of the last item
-        itemListSharedPrefsEditor.remove((baseItemKey + itemList.size()));
-        itemListSharedPrefsEditor.apply();
-    }
-
 
     @NonNull
     @Override

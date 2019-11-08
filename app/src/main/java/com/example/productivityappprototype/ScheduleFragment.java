@@ -67,6 +67,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
     private com.example.productivityappprototype.ScheduleItemListAdapter scheduleItemListAdapter;
     private ItemFormatter itemFormatter;
     private SharedPreferencesFileManager sharedPrefsManager;
+    private ScheduledItemTimeManager scheduledItemTimeManager;
 
     public ScheduleFragment() {
         // Required empty public constructor
@@ -122,7 +123,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //Unschedule all their items if they have any.
-                                if(rawScheduledItems.size() != 0) clearSchedule();
+                                if(rawScheduledItems.size() != 0) ClearSchedule();
                             }
                         });
                 dialogBuilder.setNegativeButton("No", null);
@@ -134,6 +135,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         tutorialMessage = v.findViewById(R.id.text_no_scheduled_items);
 
         sharedPrefsManager = new SharedPreferencesFileManager(this.getContext()); //Initialise object which manipulates and reads from the shared prefs files
+        scheduledItemTimeManager = new ScheduledItemTimeManager(this.getContext()); //Initialise the time manager for the operations on the start and end times of the scheduled item
 
         //sharedPrefsManager.clearSharedPreferences(getContext()); //useful when the shared preferences files are wrong, causing errors.
         return v;
@@ -191,12 +193,12 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         //Look at bundle data to determine if items need to be reformatted or just read from the file
         if(savedInstanceState != null) {
             //If the old display width does not match the current display width
-            if(savedInstanceState.getInt("displayWidth") != dm.widthPixels) reformatScheduledItems();
+            if(savedInstanceState.getInt("displayWidth") != dm.widthPixels) ReformatScheduledItems();
 
             //Else just load the old data
             else formattedScheduledItemsWithTimes = sharedPrefsManager.restoreStringsFromFile(formattedScheduledItemsSharedPrefs, formattedScheduledItemsWithTimes);
         }
-        else reformatScheduledItems(); //Ensure they have the right formatting
+        else ReformatScheduledItems(); //Ensure they have the right formatting
 
         if(scheduleItemListAdapter != null) scheduleItemListAdapter.notifyDataSetChanged();
 
@@ -206,7 +208,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
     }
 
     //This unschedules all the scheduled items, clearing the schedule for the user
-    public void clearSchedule() {
+    public void ClearSchedule() {
         int maxItemIndex = rawScheduledItems.size();
 
         //Iterate through the items and unschedule each one, from the back to the start
@@ -215,28 +217,28 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         }
     }
 
-    //The on click listener for the floating action button which displays a dialog and to allow the user to schedule a task
+    //The on click listener for the floating action button which displays a dialog and to allow the user to schedule a new item
     @Override
     public void onClick(final View v) {
         //--Create and display the dialogue with the custom layout--
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-        //Set dialog characteristics
-        builder.setTitle("Schedule An Item");
-        //builder.setMessage("Select an item from the item list, or a one-time item. Optionally provide either a start time, and end time, or both.");
 
         //Add the custom layout using an inflater
         LayoutInflater inflater = LayoutInflater.from(v.getContext());
         final View dialogView = inflater.inflate(R.layout.schedule_new_item_dialog, null); //Inflate the layout
 
         //--Initiate the recycler view in the dialog layout to display the item list items--
-        //Relevant linked lists for the data
-        //The list which holds items found in the item list tab. Note: does not include items the user enters through the edit text in the schedule item dialog.
+        //The list which holds items found in the item list tab.
         LinkedList<String> itemList = sharedPrefsManager.getItemList(); //Get the item list data that is saved in shared preferences
-        RecyclerView dialogRecyclerView = dialogView.findViewById(R.id.recyclerview_existing_items); //Get a handle to the recyclerview
+        final RecyclerView dialogRecyclerView = dialogView.findViewById(R.id.recyclerview_existing_items); //Get a handle to the recyclerview
         ScheduleDialogItemListAdapter adapter = new ScheduleDialogItemListAdapter(this, itemList, this); //Create the correct adapter and supply the data with the custom adapter
         dialogRecyclerView.setAdapter(adapter); //Set the adapter
         dialogRecyclerView.setLayoutManager(new LinearLayoutManager(dialogView.getContext())); //Assign the recyclerview a default layout manager
+
+        //Display the number of items in the recyclerview (and in the item list) to the user
+        TextView textViewUseAnExistingItem = dialogView.findViewById(R.id.text_use_an_existing_item);
+        String textWithNumberOfItems = getString(R.string.use_an_existing_item) + " (" + itemList.size() + ")";
+        textViewUseAnExistingItem.setText(textWithNumberOfItems);
 
         builder.setView(dialogView); //Set the now-created layout to the dialog
 
@@ -253,7 +255,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
                 //If the user selected an item in some way before pressing 'schedule item'
                 if (existingItemSelected != null) {
                     rawScheduledItems.addLast(existingItemSelected); //Add the raw name to the list, before it is scheduled and reset to null
-                    scheduleItem(existingItemSelected); //Schedule the item with the given data
+                    ScheduleItem(existingItemSelected); //Schedule the item with the given data
                     return;
                 }
 
@@ -264,7 +266,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
 
                     //When the item entered this way is legitimate (to stop extremely long names)
                     if (oneTimeItemName.length() >= MIN_ITEM_LENGTH && oneTimeItemName.length() <= MAX_ITEM_LENGTH) {
-                        scheduleItem(oneTimeItemName);
+                        ScheduleItem(oneTimeItemName);
                         rawScheduledItems.addLast(oneTimeItemName); //Add the raw name to the list, before it is scheduled and reset to null
                         return;
                     }
@@ -316,15 +318,30 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         final Calendar currentTime = Calendar.getInstance();
         final long midDayInMs = 12*60*60*1000; //Used to account for the default value of mid day
 
-        //Get a handle on the start time button
-        final Button startTimeButton = dialogView.findViewById(R.id.button_start_time);
+        final Button startTimeButton = dialogView.findViewById(R.id.button_start_time); //Get a handle on the start time button
+        final TextView durationTextView = dialogView.findViewById(R.id.text_item_duration); //Get a handle on the duration text view
+
         //Set the listener for the start time button to allow for time picking to occur
         startTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View buttonView) {
-                //Get the current time when the user pressed the button that opens the picker
-                int buttonStartHour = currentTime.get(Calendar.HOUR_OF_DAY);
-                int buttonStartMinute = currentTime.get(Calendar.MINUTE);
+                int buttonStartHour;
+                int buttonStartMinute;
+
+                //Make the time picker open up to the previously selected time if it exists
+                if(startTimeInMs != defaultStartEndTimeInMs) {
+                    //get the hour from the given time
+                    String[] startTimeParts = startTime.toString().split(":");
+                    buttonStartHour = Integer.parseInt(startTimeParts[0]);
+
+                    //get the minute from the given time
+                    buttonStartMinute = Integer.parseInt(startTimeParts[1]);
+                }
+
+                else { //Make the time picker open up to the current time
+                    buttonStartHour = currentTime.get(Calendar.HOUR_OF_DAY);
+                    buttonStartMinute = currentTime.get(Calendar.MINUTE);
+                }
 
                 //Initialise the time picker dialog and its listener
                 timePickerDialog = new TimePickerDialog(v.getContext(), new TimePickerDialog.OnTimeSetListener() {
@@ -339,19 +356,28 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
                         long currentTimeInMs = (currentHour * 60 * 60 * 1000) + (currentMinute * 60 * 1000);
 
                         TextView startTimeSelected = dialogView.findViewById(R.id.text_start_time);
+                        TextView durationTextView = dialogView.findViewById(R.id.text_item_duration);
 
                         //If the specified time is possible
-                        if(scheduledTimeLegitimate(startTimeInMs, endTimeInMs, currentTimeInMs, v.getContext())) {
+                        if(scheduledItemTimeManager.IsScheduledTimeLegitimate(startTimeInMs, endTimeInMs, currentTimeInMs, v.getContext())) {
                             //Convert the selected time to a readable format
                             startTime = new Time(startTimeInMs - midDayInMs); //Set the correct time, adjusting for a default value of mid day.
                             //Update the start time text view
                             startTimeSelected.setText(startTime.toString()); //Show the user what time they selected
+
+                            //When a duration is possible, find it and display it
+                            if(startTimeInMs != defaultStartEndTimeInMs && endTimeInMs != defaultStartEndTimeInMs) {
+                                String durationText = scheduledItemTimeManager.GetDurationText(startTime.toString(), endTime.toString());
+                                durationTextView.setText(durationText);
+                            }
                         }
 
                         //When the time is not legit
                         else {
                             startTimeInMs = defaultStartEndTimeInMs ; //Reset the selected time to default value
+                            startTime = null;
                             startTimeSelected.setText(R.string.awaiting_selection); //Reset to default value
+                            durationTextView.setText(getString(R.string.n_a)); //duration is not possible anymore
                         }
 
                     }
@@ -368,11 +394,42 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         endTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View buttonView) {
-                //Get the current time when the user pressed the button that opens the picker
-                int buttonEndHour = currentTime.get(Calendar.HOUR_OF_DAY);
-                if(buttonEndHour <= 23) buttonEndHour++; //Set the default end time to be an hour in advance, which is a practical time.
+                int buttonEndHour;
+                int buttonEndMinute;
 
-                int buttonEndMinute = currentTime.get(Calendar.MINUTE);
+                //Make the time picker open up to the previously selected time if it exists
+                if(endTimeInMs != defaultStartEndTimeInMs) {
+                    //get the hour from the given time
+                    String[] endTimeParts = endTime.toString().split(":");
+                    buttonEndHour = Integer.parseInt(endTimeParts[0]);
+
+                    //get the minute from the given time
+                    buttonEndMinute = Integer.parseInt(endTimeParts[1]);
+                }
+
+                else { //Make the time picker open up to a valid time
+
+                    //When there is a start time, open it up to be 1 hour in advance from that (if possible) because 1 hour is a common time period for a task
+                    if(startTimeInMs != defaultStartEndTimeInMs) {
+                        int startHour = startTime.getHours();
+                        if(startHour < 23) {
+                            buttonEndHour = startHour + 1;
+                            buttonEndMinute = startTime.getMinutes();
+                        }
+
+                        else {
+                            buttonEndHour = startHour;
+                            buttonEndMinute = 59; //Give it the longest possible time
+                        }
+                    }
+
+                    else { //Else just make it open up to be 1 hour in advance from the current time
+                        buttonEndHour = currentTime.get(Calendar.HOUR_OF_DAY);
+                        if(buttonEndHour < 23) buttonEndHour++;
+
+                        buttonEndMinute = currentTime.get(Calendar.MINUTE);
+                    }
+                }
 
                 //Initialise the time picker dialog and its listener
                 timePickerDialog = new TimePickerDialog(v.getContext(), new TimePickerDialog.OnTimeSetListener() {
@@ -387,32 +444,71 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
                         long currentTimeInMs = (currentHour * 60 * 60 * 1000) + (currentMinute * 60 * 1000);
 
                         TextView endTimeSelected = dialogView.findViewById(R.id.text_end_time); //Get a handle on the text view which displays the selected time
+                        TextView durationTextView = dialogView.findViewById(R.id.text_item_duration);
 
                         //If the specified time is possible
-                        if(scheduledTimeLegitimate(startTimeInMs, endTimeInMs, currentTimeInMs, v.getContext())) {
+                        if(scheduledItemTimeManager.IsScheduledTimeLegitimate(startTimeInMs, endTimeInMs, currentTimeInMs, v.getContext())) {
                             //Store the entered time value
                             endTime = new Time(endTimeInMs - midDayInMs); //Set the correct time, adjusting for a default value of mid day.
 
                             //Update the end time text view
                             endTimeSelected.setText(endTime.toString()); //Show the user what time they selected
+
+                            //When a duration is possible, find it and display it
+                            if(startTimeInMs != defaultStartEndTimeInMs && endTimeInMs != defaultStartEndTimeInMs) {
+                                String durationText = scheduledItemTimeManager.GetDurationText(startTime.toString(), endTime.toString());
+                                durationTextView.setText(durationText);
+                            }
                         }
 
                         //When the time is not legit
                         else {
                             endTimeInMs = defaultStartEndTimeInMs; //Reset the selected time to default value
+                            endTime = null;
                             endTimeSelected.setText(R.string.awaiting_selection); //Reset to default value
+                            durationTextView.setText(getString(R.string.n_a)); //duration is not possible anymore
                         }
                     }
                 }, buttonEndHour, buttonEndMinute, true);
-
                 timePickerDialog.setTitle("Select An End Time");
                 timePickerDialog.show();
+            }
+        });
+
+        //--Set the clearing functionality of the clear start and end time buttons---
+        Button clearStartTimeButton = dialogView.findViewById(R.id.button_clear_start_time);
+        clearStartTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Clear the start times
+                startTimeInMs = defaultStartEndTimeInMs ;
+                startTime = null;
+
+                //Reset the texts
+                TextView startTimeSelected = dialogView.findViewById(R.id.text_start_time);
+                startTimeSelected.setText(R.string.awaiting_selection); //Reset to default value
+                durationTextView.setText(getString(R.string.n_a)); //duration is not possible anymore
+            }
+        });
+
+        Button clearEndTimeButton = dialogView.findViewById(R.id.button_clear_end_time);
+        clearEndTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Clear the end times
+                endTimeInMs = defaultStartEndTimeInMs; //Reset the selected time to default value
+                endTime = null;
+
+                //Reset the texts
+                TextView endTimeSelected = dialogView.findViewById(R.id.text_end_time);
+                endTimeSelected.setText(R.string.awaiting_selection); //Reset to default value
+                durationTextView.setText(getString(R.string.n_a)); //duration is not possible anymore
             }
         });
     }
 
    //This method uses the available data to input into the main recycler view in the schedule tab. It will format the entered so that it is displayed effectively.
-    public void scheduleItem(String itemToSchedule) {
+    public void ScheduleItem(String itemToSchedule) {
         String startTimeInText;
         String endTimeInText;
 
@@ -484,7 +580,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
     }
 
     //This method will reformat the scheduled items to appropriately fit the change in device orientation and therefore landscape resolution
-    private void reformatScheduledItems() {
+    private void ReformatScheduledItems() {
         //Iterate through each item
         for(int itemIndex = 0; itemIndex < rawScheduledItems.size(); itemIndex++) {
             //Re-format each item and update the linked list
@@ -494,48 +590,6 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
             //Update the shared prefs file with the new formatted items
             sharedPrefsManager.updateItemAt(itemIndex, reformattedScheduledItem, formattedScheduledItemsSharedPrefs);
         }
-    }
-
-    /* This method performs a series of checks to ensure that the schedule time(s) are able to be realistically completed. If the time is confirmed to be legit, true is returned.
-    Appropriate error messages are displayed via Toasts when the selected time is not legit. */
-    public Boolean scheduledTimeLegitimate(long startTimeInMs, long endTimeInMs, long currentTimeInMs, Context context) {
-        //Check the cases when both a start time and an end time are entered
-        if(startTimeInMs != defaultStartEndTimeInMs && endTimeInMs != defaultStartEndTimeInMs) {
-            //1. Check if the user has planned to start or end an item before the current time (in the past)
-            if(startTimeInMs < currentTimeInMs  || endTimeInMs < currentTimeInMs) {
-                Toast.makeText(context, "You cannot schedule an item to start or end before the current time!", Toast.LENGTH_LONG).show(); //Display an appropriate error message to let user know what was wrong about their selection
-                return false;
-            }
-
-            //2. If the start time is after the end time it is not a legit time
-            if(startTimeInMs > endTimeInMs) {
-                Toast.makeText(context, "Your start time needs to be before your end time!", Toast.LENGTH_LONG).show(); //Display an appropriate error message to let user know what was wrong about their selection
-                return false;
-            }
-
-            //3. If the two times do not have their default values and if they are same, it is not legit
-            if((startTimeInMs == endTimeInMs )) {
-                Toast.makeText(context, "You cannot start and end an item at the same time!", Toast.LENGTH_LONG).show(); //Display an appropriate error message to let user know what was wrong about their selection
-                return false;
-            }
-        }
-
-        //When the user has only selected a start time or an end time, but not both
-        else {
-            //The earliest time the user should be able to start an item is directly after they press set item, hence < and not <= like with endTimeInMs.
-            if(startTimeInMs != defaultStartEndTimeInMs && startTimeInMs < currentTimeInMs) {
-                Toast.makeText(context, "You cannot start an item in the past!", Toast.LENGTH_LONG).show(); //Display an appropriate error message to let user know what was wrong about their selection
-                return false;
-            }
-
-            //The user cannot end an item just as they schedule it, hence <=.
-            if (endTimeInMs != defaultStartEndTimeInMs && endTimeInMs <= currentTimeInMs) {
-                Toast.makeText(context, "You cannot end an item in the past!", Toast.LENGTH_LONG).show(); //Display an appropriate error message to let user know what was wrong about their selection
-                return false;
-            }
-        }
-
-        return true; //If this point is reached, the time is presumed to be legitimate
     }
 
     @Override
@@ -642,7 +696,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         sharedPrefsManager.updateItemAt(scheduledItemIndex, complete, scheduledItemsCompletionStatusSharedPrefs);
     }
 
-    //This method is used to disable the 'unschedule all' FAB button when there are no items
+    //This method is used to disable the 'unschedule all' FAB button when there are no items, and re enable it when there are items
     public void ToggleUnscheduleAllButton() {
         //Set to a nice dark grey for disabled
         if (formattedScheduledItemsWithTimes.size() == 0) {
@@ -658,7 +712,21 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
 
     //This method is used to hide and show the tutorial message when there are no scheduled items
     public void ToggleTutorialMessage() {
-        if (formattedScheduledItemsWithTimes.size() >= 1) tutorialMessage.setVisibility(View.INVISIBLE);
-        else tutorialMessage.setVisibility(View.VISIBLE); //Display the tutorial message when they are no items
+        TextView textViewItemHeading = getView().findViewById(R.id.text_item_heading);
+        TextView textViewTimeHeading = getView().findViewById(R.id.text_scheduled_time_heading);
+
+        //Hide tutorial message
+        if (formattedScheduledItemsWithTimes.size() >= 1) {
+            textViewItemHeading.setVisibility(View.VISIBLE);
+            textViewTimeHeading.setVisibility(View.VISIBLE);
+            tutorialMessage.setVisibility(View.INVISIBLE);
+        }
+
+        //Show tutorial message
+        else {
+            textViewItemHeading.setVisibility(View.INVISIBLE);
+            textViewTimeHeading.setVisibility(View.INVISIBLE);
+            tutorialMessage.setVisibility(View.VISIBLE); //Display the tutorial message when they are no items
+        }
     }
 }
