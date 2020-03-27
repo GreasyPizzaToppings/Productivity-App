@@ -20,6 +20,7 @@ import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +69,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
     private ItemFormatter itemFormatter;
     private SharedPreferencesFileManager sharedPrefsManager;
     private ScheduledItemTimeManager scheduledItemTimeManager;
+    private StatisticsManager statisticsManager;
 
     public ScheduleFragment() {
         // Required empty public constructor
@@ -190,6 +192,9 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         //Initialise the item formatter object
         itemFormatter = new ItemFormatter(this.getContext(), scheduledItemPaint, timeHeaderPaint, dm.widthPixels);
 
+        //Initialise the statistics manager
+        statisticsManager = new StatisticsManager(getView());
+
         //Look at bundle data to determine if items need to be reformatted or just read from the file
         if(savedInstanceState != null) {
             //If the old display width does not match the current display width
@@ -205,6 +210,8 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         //Toggle the message and the unschedule all button now that the data has been restored
         ToggleTutorialMessage();
         ToggleUnscheduleAllButton();
+
+        statisticsManager.GetProductivityStatistics(rawScheduledItems);
     }
 
     //This unschedules all the scheduled items, clearing the schedule for the user
@@ -266,8 +273,8 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
 
                     //When the item entered this way is legitimate (to stop extremely long names)
                     if (oneTimeItemName.length() >= MIN_ITEM_LENGTH && oneTimeItemName.length() <= MAX_ITEM_LENGTH) {
-                        ScheduleItem(oneTimeItemName);
                         rawScheduledItems.addLast(oneTimeItemName); //Add the raw name to the list, before it is scheduled and reset to null
+                        ScheduleItem(oneTimeItemName);
                         return;
                     }
 
@@ -577,6 +584,9 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
         startTimeInMs = defaultStartEndTimeInMs;
         endTime = null;
         endTimeInMs = defaultStartEndTimeInMs;
+
+        //Calculate statistics
+        statisticsManager.GetProductivityStatistics(rawScheduledItems);
     }
 
     //This method will reformat the scheduled items to appropriately fit the change in device orientation and therefore landscape resolution
@@ -665,6 +675,9 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
 
         //Update the formatted item shared prefs file
         sharedPrefsManager.updateItemAt(scheduledItemIndex, updatedFormattedScheduledItem, formattedScheduledItemsSharedPrefs);
+
+        //Calculate statistics
+        statisticsManager.GetProductivityStatistics(rawScheduledItems);
     }
 
     @Override
@@ -687,6 +700,9 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener, 
 
         ToggleTutorialMessage(); //Show the tutorial message if necessary
         ToggleUnscheduleAllButton(); //Disable the button if necessary
+
+        //Calculate statistics
+        statisticsManager.GetProductivityStatistics(rawScheduledItems);
     }
 
     @Override

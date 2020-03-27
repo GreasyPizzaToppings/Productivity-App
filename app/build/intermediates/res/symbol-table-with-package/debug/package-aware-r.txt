@@ -1258,6 +1258,7 @@ id text_start_time_heading
 id text_use_a_one_time_item
 id text_use_an_existing_item
 id text_width_measuring
+id text_work_summary
 id textinput_counter
 id textinput_error
 id textinput_helper_text

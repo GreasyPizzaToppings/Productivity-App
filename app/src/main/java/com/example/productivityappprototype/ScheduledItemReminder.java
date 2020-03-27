@@ -1,3 +1,4 @@
+//TODO: Actually implement the notification system. It doesn't work at the moment.
 package com.example.productivityappprototype;
 
 import android.app.Notification;
