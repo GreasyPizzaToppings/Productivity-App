@@ -1,6 +1,4 @@
 # Productivity-App
-A mobile application for Android devices for (a hopeful) improvement to the organisation of tasks and overall productivity.
-
 
 ### Item List Tab
 The "Item List" tab is where you store the items you commonly perform. It acts as a repository for the tasks you commonly do on a day-to-day basis. 
